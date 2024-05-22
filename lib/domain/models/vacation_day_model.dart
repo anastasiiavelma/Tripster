@@ -1,6 +1,5 @@
 import 'package:tripster/domain/models/note_model.dart';
 import 'package:tripster/domain/models/place_model.dart';
-import 'package:tripster/domain/models/vacation_model.dart';
 
 class VacationDay {
   late String vacationDayId;
@@ -8,7 +7,7 @@ class VacationDay {
   late String vacationId;
   late DateTime createdAt;
   late String location;
-  late List<Place>? place;
+  late final List<Place>? place;
   late List<Note> notes;
   late double budget;
 
@@ -19,7 +18,7 @@ class VacationDay {
       required this.location,
       required this.name,
       required this.notes,
-      this.place,
+      required this.place,
       required this.vacationDayId});
 
   VacationDay.parseJson(Map<String, dynamic> json) {
@@ -27,7 +26,7 @@ class VacationDay {
     name = json['name'];
     createdAt = json['createdAt'];
     location = json['location'];
-    place = json['place'];
+    place = List<Place>.from(json['place']);
     notes = List<Note>.from(json['notes']);
     ;
     budget = json['budget'];
@@ -48,49 +47,111 @@ class VacationDay {
 
 List<VacationDay> vacationDays = [
   VacationDay(
+    place: [
+      Place(
+        id: '1',
+        name: 'Эйфелева башня',
+        latitude: 48.8584,
+        longitude: 2.2945,
+        description: 'Знаменитая башня в Париже.',
+        rating: 5,
+        openHours: ['9:00', '22:00'],
+        imageUrl: 'https://example.com/eiffel.jpg',
+      ),
+    ],
     vacationId: '1',
     vacationDayId: '1',
-    name: 'First Day of Vacation',
-    createdAt: DateTime.now(),
-    location: 'Miami, Florida',
-    // place: [places[1], places[2]],
+    name: 'Первый день отпуска',
+    createdAt: DateTime(2023, 5, 10),
+    location: 'Париж, Франция',
     notes: [
       Note(
         noteId: '1',
-        title: 'Breakfast at Ocean Drive',
-        description: 'Try the Cuban coffee!',
+        title: 'Завтрак в кафе Le Procope',
+        description: 'Попробуйте круассаны и кофе.',
         userId: '1',
       ),
       Note(
-        noteId: '2',
-        title: 'Visit Art Deco Historic District',
-        description: 'Enjoy the vibrant colors and architecture.',
-        userId: '2',
+        noteId: '3',
+        title: 'Посещение Лувра',
+        description: 'Увидеть Мону Лизу и другие шедевры.',
+        userId: '1',
+      ),
+      Note(
+        noteId: '3',
+        title: 'Посещение Лувра',
+        description: 'Увидеть Мону Лизу и другие шедевры.',
+        userId: '1',
       ),
     ],
-    budget: 500.0,
+    budget: 300.0,
   ),
   VacationDay(
+    place: [
+      Place(
+        id: '1',
+        name: 'Эйфелева башня',
+        latitude: 48.8584,
+        longitude: 2.2945,
+        description: 'Знаменитая башня в Париже.',
+        rating: 5,
+        openHours: ['9:00', '22:00'],
+        imageUrl: 'https://example.com/eiffel.jpg',
+      ),
+    ],
     vacationId: '1',
     vacationDayId: '2',
-    name: 'Second Day of Vacation',
-    createdAt: DateTime.now(),
-    location: 'Los Angeles, California',
-    // place: [places[1], places[2]],
+    name: 'Второй день отпуска',
+    createdAt: DateTime(2023, 5, 11),
+    location: 'Париж, Франция',
     notes: [
       Note(
-        noteId: '2',
-        title: 'Visit Art Deco Historic District',
-        description: 'Enjoy the vibrant colors and architecture.',
-        userId: '2',
+        noteId: '3',
+        title: 'Прогулка по Елисейским полям',
+        description: 'Насладитесь атмосферой Парижа.',
+        userId: '1',
       ),
       Note(
-        noteId: '2',
-        title: 'Visit Art Deco Historic District',
-        description: 'Enjoy the vibrant colors and architecture.',
+        noteId: '4',
+        title: 'Посещение Эйфелевой башни',
+        description: 'Поднимитесь на вершину для великолепного вида на город.',
         userId: '2',
       ),
     ],
-    budget: 700.0,
+    budget: 400.0,
+  ),
+  VacationDay(
+    place: [
+      Place(
+        id: '2',
+        name: 'Эйфелева башня',
+        latitude: 48.8584,
+        longitude: 2.2945,
+        description: 'Знаменитая башня в Париже.',
+        rating: 5,
+        openHours: ['9:00', '22:00'],
+        imageUrl: 'https://example.com/eiffel.jpg',
+      ),
+    ],
+    vacationId: '2',
+    vacationDayId: '3',
+    name: 'Третий день отпуска',
+    createdAt: DateTime(2023, 5, 12),
+    location: 'Рим, Италия',
+    notes: [
+      Note(
+        noteId: '5',
+        title: 'Посещение Колизея',
+        description: 'Погрузитесь в историю Древнего Рима.',
+        userId: '1',
+      ),
+      Note(
+        noteId: '6',
+        title: 'Прогулка по Ватикану',
+        description: 'Осмотрите Сикстинскую капеллу и собор Святого Петра.',
+        userId: '2',
+      ),
+    ],
+    budget: 600.0,
   ),
 ];

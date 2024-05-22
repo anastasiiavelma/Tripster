@@ -23,12 +23,14 @@ class AddressWidget extends StatelessWidget {
           final city = snapshot.data!['city'];
           return Row(
             children: [
-              Icon(Icons.location_on, color: kBackgroundColor),
+              Icon(Icons.location_on,
+                  color: Theme.of(context).colorScheme.onBackground),
+              smallSizedBoxWidth,
               Text(
                 '$country',
                 style: Theme.of(context)
                     .textTheme
-                    .displayLarge
+                    .titleMedium
                     ?.copyWith(fontSize: 18),
               ),
               if (city != null)
@@ -36,7 +38,7 @@ class AddressWidget extends StatelessWidget {
                   ' $city',
                   style: Theme.of(context)
                       .textTheme
-                      .displayLarge
+                      .titleMedium
                       ?.copyWith(fontSize: 15, fontWeight: FontWeight.w400),
                 ),
             ],

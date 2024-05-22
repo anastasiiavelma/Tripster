@@ -5,7 +5,6 @@ import './constants.dart';
 ThemeData basicTheme(bool isDarkTheme, BuildContext context) => ThemeData(
       colorScheme: isDarkTheme
           ? ColorScheme.dark(
-              //background
               background: kBackgroundColor,
               onBackground: kPrimaryColor,
               primary: kPrimaryColor,
@@ -15,11 +14,9 @@ ThemeData basicTheme(bool isDarkTheme, BuildContext context) => ThemeData(
               shadow: kBackgroundColor,
               onPrimary: kBackgroundColor,
               surface: kAccentColor,
-              //for red budget
               onError: kErrorColorDark,
             )
           : ColorScheme.light(
-              //background
               background: kPrimaryColor,
               onBackground: kBackgroundColor,
               primary: kPrimaryColor,
@@ -29,18 +26,15 @@ ThemeData basicTheme(bool isDarkTheme, BuildContext context) => ThemeData(
               secondary: kTexFieldColor,
               shadow: kAccentColor,
               onPrimary: kPrimaryColor,
-
-              //for red budget
               onError: kErrorColorLight,
             ),
       textTheme: TextTheme(
-        //for title 'register' and 'login' white
         titleLarge: GoogleFonts.lato(
             fontSize: largeTextSize,
             color: kPrimaryColor,
             letterSpacing: 1.0,
             fontWeight: FontWeight.bold),
-        //for title 'lets discover'  white
+
         titleMedium: GoogleFonts.lato(
             fontSize: mediumLargeTextSize,
             color: isDarkTheme ? kAccentColor : kBackgroundColor,
@@ -53,22 +47,21 @@ ThemeData basicTheme(bool isDarkTheme, BuildContext context) => ThemeData(
             letterSpacing: 1.0,
             fontWeight: FontWeight.bold),
 
-        // for BOLD mini-title 'sign up' and 'sign in'
         titleSmall: GoogleFonts.lato(
             fontSize: smallTextSize,
             color: isDarkTheme ? kAccentColor : kBackgroundColor,
             fontWeight: FontWeight.bold),
 
         headlineMedium: GoogleFonts.lato(
-            fontSize: 10,
+            fontSize: 16,
             color: isDarkTheme ? kAccentColor : kBackgroundColor,
-            fontWeight: FontWeight.bold),
-        //for text button PINK
+            fontWeight: FontWeight.normal),
+
         headlineSmall: GoogleFonts.lato(
           fontSize: smallTextSize,
           color: isDarkTheme ? kAccentColor : kBackgroundColor,
         ),
-        // for text button dark
+
         bodySmall: GoogleFonts.lato(
           fontSize: smallTextSize,
           color: isDarkTheme ? kBackgroundColor : kPrimaryColor,

@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:tripster/domain/models/vacation_model.dart';
 import 'package:tripster/presentation/screens/planning_trip/detail_plan_screen.dart';
+import 'package:tripster/presentation/widgets/buttons/change_theme_button.dart';
 import 'package:tripster/utils/constants.dart';
 
 class PlanTripScreen extends StatelessWidget {
@@ -17,9 +18,15 @@ class PlanTripScreen extends StatelessWidget {
           SliverAppBar(
             centerTitle: true,
             automaticallyImplyLeading: false,
-            title: Text(
-              'My trips',
-              style: TextStyle(fontSize: 30.0),
+            title: Row(
+              children: [
+                // !!! to-do: delete
+                ThemeButton(),
+                Text(
+                  'My trips',
+                  style: TextStyle(fontSize: 30.0),
+                ),
+              ],
             ),
             backgroundColor: Colors.transparent,
             expandedHeight: 110.0,
@@ -67,7 +74,7 @@ class PlanTripListWidget extends StatelessWidget {
                   ));
             },
             child: FadeInDown(
-                duration: const Duration(milliseconds: 1300),
+                duration: const Duration(milliseconds: 800),
                 child: CardWidget(vacation: vacation)),
           );
         },

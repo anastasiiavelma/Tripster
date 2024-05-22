@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tripster/data/providers/theme_providers.dart';
+import 'package:tripster/presentation/providers/theme_providers.dart';
+import 'package:tripster/utils/constants.dart';
 
 class ThemeButton extends StatelessWidget {
   const ThemeButton({super.key});
@@ -13,10 +14,10 @@ class ThemeButton extends StatelessWidget {
       onChanged: (bool newValue) {
         themeChange.darkTheme = newValue;
       },
-      activeColor: Theme.of(context).colorScheme.background,
-      activeTrackColor: Theme.of(context).colorScheme.primary,
+      activeColor: Theme.of(context).colorScheme.primary,
+      activeTrackColor: Theme.of(context).colorScheme.tertiary,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      inactiveThumbColor: Theme.of(context).colorScheme.primary,
+      inactiveThumbColor: kAccentColor,
       inactiveTrackColor: Theme.of(context).colorScheme.background,
     );
   }

@@ -11,6 +11,8 @@ class ProfileLoaded extends ProfileState {
   ProfileLoaded(this.profileUser);
 }
 
+class ProfileUnauthenticated extends ProfileState {}
+
 class ProfileError extends ProfileState {
   final String error;
 

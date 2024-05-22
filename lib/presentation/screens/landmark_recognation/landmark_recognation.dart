@@ -2,17 +2,19 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tripster/data/cubits/landmark_cubit/landmark_cubit.dart';
-import 'package:tripster/data/cubits/landmark_cubit/landmark_state.dart';
+import 'package:tripster/presentation/cubits/landmark_cubit/landmark_cubit.dart';
+import 'package:tripster/presentation/cubits/landmark_cubit/landmark_state.dart';
+import 'package:tripster/data/repository/landmark_repository.dart';
 import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 
 class LandmarkRecognition extends StatelessWidget {
-  const LandmarkRecognition({super.key});
+  final LandmarkRepository _authRepository = LandmarkRepository();
+  LandmarkRecognition({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (context) => LandmarkCubit(),
+        create: (context) => LandmarkCubit(_authRepository),
         child: LandmarkRecognitionView(),
       ),
     );

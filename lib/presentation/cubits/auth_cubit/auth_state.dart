@@ -17,8 +17,6 @@ class AuthAuthenticated extends AuthState {
   // List<Object?> get props => [userId];
 }
 
-class AuthRegistered extends AuthState {}
-
 class AuthError extends AuthState {
   final String message;
 

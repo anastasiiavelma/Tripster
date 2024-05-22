@@ -1,15 +1,14 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tripster/data/cubits/profile_cubit/profile_cubit.dart';
-import 'package:tripster/data/cubits/profile_cubit/profile_state.dart';
-import 'package:tripster/presentation/screens/home/home_screen.dart';
-import 'package:tripster/presentation/screens/profile/header_info.dart';
+import 'package:tripster/presentation/cubits/profile_cubit/profile_cubit.dart';
+import 'package:tripster/presentation/cubits/profile_cubit/profile_state.dart';
+import 'package:tripster/data/repository/profile_repository.dart';
+import 'package:tripster/presentation/screens/gallery/collection_photo_widget.dart';
+import 'package:tripster/presentation/screens/profile/edit_profile_screen.dart';
+import 'package:tripster/presentation/screens/settings/settings_screen.dart';
 import 'package:tripster/presentation/widgets/add_collection_dialog.dart';
-import 'package:tripster/presentation/screens/profile/gallery_photo_screen.dart';
-import 'package:tripster/presentation/widgets/buttons/change_theme_button.dart';
 import 'package:tripster/utils/constants.dart';
-import 'package:flutter_font_icons/flutter_font_icons.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String? token;
@@ -19,20 +18,14 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  List<String> collections = [
-    'Weekend 2023',
-    'Weekend 2024',
-  ];
-
-  List<String> location = [
-    'Ireland',
-    'Island',
-  ];
-
-  List<String> dates = [
-    '24 June - 25 September',
-    '24 June - 25 September',
-  ];
+  late final ProfileCubit profileCubit;
+  final ProfileRepository _profileRepository = ProfileRepository();
+  @override
+  void initState() {
+    super.initState();
+    profileCubit = ProfileCubit(_profileRepository);
+    profileCubit.getUserProfile(widget.token);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,82 +37,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(15.0, 55.0, 0.0, 20.0),
             child: BlocProvider(
-              create: (context) => ProfileCubit()..getUserProfile(widget.token),
+              create: (context) => profileCubit,
               child: BlocBuilder<ProfileCubit, ProfileState>(
                   builder: (context, state) {
                 if (state is ProfileLoaded) {
+                  final userInfo = state.profileUser;
+
                   return Row(
                     children: [
-                      Stack(
-                        children: [
-                          SizedBox(
-                            width: 150,
-                            height: 150,
-                            child: FadeInUp(
-                              duration: const Duration(milliseconds: 1600),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: const Image(
-                                  image:
-                                      AssetImage('assets/images/traveller.png'),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: FadeInUp(
-                              duration: const Duration(milliseconds: 1600),
-                              child: Container(
-                                width: 35,
-                                height: 35,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  color: kAccentColor,
-                                ),
-                                child: const Icon(
-                                  Icons.edit,
-                                  color: Colors.black,
-                                  size: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 10),
+                      UserPhotoWidget(),
+                      smallSizedBoxWidth,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          FadeInUp(
-                            duration: const Duration(milliseconds: 1900),
-                            child: Text(
-                              state.profileUser.name,
-                              textAlign: TextAlign.start,
-                              style: Theme.of(context).textTheme.titleMedium,
+                          Container(
+                            height: 40,
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: FadeInUp(
+                              duration: const Duration(milliseconds: 800),
+                              child: Text(
+                                maxLines: 1,
+                                userInfo.name,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.start,
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
                             ),
                           ),
-                          FadeInUp(
-                            duration: const Duration(milliseconds: 1900),
-                            child: Text(
-                              state.profileUser.email,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.start,
-                              style: Theme.of(context).textTheme.headlineMedium,
+                          SizedBox(
+                            child: FadeInUp(
+                              duration: const Duration(milliseconds: 800),
+                              child: Text(
+                                userInfo.email,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.start,
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 20),
                           FadeInUp(
-                            duration: const Duration(milliseconds: 1900),
+                            duration: const Duration(milliseconds: 800),
                             child: GestureDetector(
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const HomeScreen(),
-                                ),
-                              ),
+                              onTap: () => showModalBottomSheet(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.background,
+                                  isScrollControlled: true,
+                                  context: context,
+                                  builder: (context) {
+                                    return EditProfileScreen(
+                                      profileCubit: profileCubit,
+                                      userInfo: userInfo,
+                                    );
+                                  }),
                               child: Row(
                                 children: [
                                   Container(
@@ -139,9 +110,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),
                                   ),
-                                  ThemeButton(),
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SettingScreen(
+                                              profileCubit: profileCubit)),
+                                    ),
                                     icon: Icon(
                                       Icons.settings,
                                       color: Theme.of(context)
@@ -176,7 +151,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           Expanded(
             child: FadeInUp(
-              duration: const Duration(milliseconds: 1900),
+              duration: const Duration(milliseconds: 800),
               child: Container(
                 decoration: BoxDecoration(
                   color: kAccentColor,
@@ -187,15 +162,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child: Column(
                   children: [
-                    SettingWidget(),
+                    CollectionWidget(profileCubit: profileCubit),
                     const SizedBox(
                       height: 10.0,
                     ),
                     Expanded(
-                      child: ListOfCollectionPhotosWidget(
-                          collections: collections,
-                          location: location,
-                          dates: dates),
+                      child: ListOfCollectionPhotosWidget(),
                     ),
                   ],
                 ),
@@ -215,90 +187,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-class SettingWidget extends StatelessWidget {
-  const SettingWidget({
+class UserPhotoWidget extends StatelessWidget {
+  const UserPhotoWidget({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Icon(Icons.sort, color: Theme.of(context).colorScheme.onBackground),
-            Text(
-              'My collections',
-              style: TextStyle(
-                color: kPrimaryColor,
-                fontSize: mediumLargeTextSize,
-              ),
+    return Stack(
+      children: [
+        SizedBox(
+          width: 150,
+          height: 150,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: const Image(
+              image: AssetImage('assets/images/traveller.png'),
             ),
-            Icon(Icons.filter_list,
-                color: Theme.of(context).colorScheme.onBackground),
-          ],
-        ));
-  }
-}
-
-class ListOfCollectionPhotosWidget extends StatelessWidget {
-  const ListOfCollectionPhotosWidget({
-    super.key,
-    required this.collections,
-    required this.location,
-    required this.dates,
-  });
-
-  final List<String> collections;
-  final List<String> location;
-  final List<String> dates;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: EdgeInsets.zero,
-      itemCount: collections.length,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            padding: const EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.background,
-                borderRadius: BorderRadius.circular(20.0)),
-            child: ListTile(
-              leading: const Icon(Ionicons.airplane),
-              trailing: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 25,
-                    width: 45,
-                    child: Icon(Icons.location_on,
-                        color: Theme.of(context).colorScheme.onBackground),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(location[index],
-                      style: Theme.of(context).textTheme.headlineSmall),
-                ],
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: FadeInUp(
+            duration: const Duration(milliseconds: 800),
+            child: Container(
+              width: 35,
+              height: 35,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: kAccentColor,
               ),
-              subtitle: Text(dates[index],
-                  style: Theme.of(context).textTheme.displaySmall),
-              title: Text(collections[index],
-                  style: Theme.of(context).textTheme.headlineSmall),
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      PhotoGallery(collectionName: collections[index]),
-                ),
+              child: const Icon(
+                Icons.edit,
+                color: Colors.black,
+                size: 20,
               ),
             ),
           ),
-        );
-      },
+        ),
+      ],
     );
   }
 }

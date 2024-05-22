@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tripster/data/cubits/auth_cubit/auth_cubit.dart';
-import 'package:tripster/data/cubits/auth_cubit/auth_state.dart';
+import 'package:tripster/presentation/cubits/auth_cubit/auth_cubit.dart';
+import 'package:tripster/presentation/cubits/auth_cubit/auth_state.dart';
+import 'package:tripster/data/repository/auth_repository.dart';
 import 'package:tripster/presentation/widgets/headers/header_widget.dart';
 import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 import 'package:tripster/presentation/screens/auth/sign_up_screen.dart';
@@ -17,6 +18,7 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  final AuthRepository _authRepository = AuthRepository();
   late final TextEditingController _passwordController;
   late final TextEditingController _emailController;
   final _formKey = GlobalKey<FormState>();
@@ -32,7 +34,7 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: BlocProvider(
-          create: (context) => AuthCubit(),
+          create: (context) => AuthCubit(_authRepository),
           child: BlocConsumer<AuthCubit, AuthState>(
             listener: (context, state) {
               if (state is AuthLoading) {
@@ -40,7 +42,8 @@ class _SignInScreenState extends State<SignInScreen> {
                 final token = state.token;
                 print('================');
                 print(token);
-                Navigator.pushNamed(context, '/menu', arguments: token);
+                Navigator.pushReplacementNamed(context, '/menu',
+                    arguments: token);
               } else if (state is AuthError) {
                 CustomSnackBar.show(
                   context,
@@ -159,7 +162,7 @@ class _LoginFormsWidgetState extends State<LoginFormsWidget> {
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Email",
-                        hintStyle: Theme.of(context).textTheme.displayLarge),
+                        hintStyle: Theme.of(context).textTheme.bodyMedium),
                   ),
                 ),
                 Container(
@@ -177,7 +180,7 @@ class _LoginFormsWidgetState extends State<LoginFormsWidget> {
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: "Password",
-                      hintStyle: Theme.of(context).textTheme.displayLarge,
+                      hintStyle: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tripster/data/cubits/auth_cubit/auth_cubit.dart';
-import 'package:tripster/data/cubits/auth_cubit/auth_state.dart';
+import 'package:tripster/presentation/cubits/auth_cubit/auth_cubit.dart';
+import 'package:tripster/presentation/cubits/auth_cubit/auth_state.dart';
+import 'package:tripster/data/repository/auth_repository.dart';
 import 'package:tripster/presentation/widgets/headers/header_widget.dart';
 import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 import 'package:tripster/presentation/screens/auth/sign_in_screen.dart';
@@ -16,6 +17,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final AuthRepository _authRepository = AuthRepository();
   late final TextEditingController _passwordController;
   late final TextEditingController _emailController;
   late final TextEditingController _confirmPasswordController;
@@ -36,12 +38,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: BlocProvider(
-          create: (context) => AuthCubit(),
+          create: (context) => AuthCubit(_authRepository),
           child: BlocConsumer<AuthCubit, AuthState>(
             listener: (context, state) {
               if (state is AuthLoading) {
-              } else if (state is AuthRegistered) {
-                Navigator.pushNamed(context, '/menu');
+              } else if (state is AuthAuthenticated) {
+                final token = state.token;
+                Navigator.pushNamed(context, '/menu', arguments: token);
               } else if (state is AuthError) {
                 CustomSnackBar.show(
                   context,
@@ -74,15 +77,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             height: 20,
                           ),
                           TextAccentButton(
-                            onTap: () => {
-                              if (_formKey.currentState!.validate())
-                                {
-                                  context.read<AuthCubit>().registerUser(
-                                        _nameController.text.trim(),
-                                        _emailController.text.trim(),
-                                        _passwordController.text.trim(),
-                                      ),
-                                }
+                            onTap: () async {
+                              if (_formKey.currentState!.validate()) {
+                                context.read<AuthCubit>().registerUser(
+                                      _nameController.text.trim(),
+                                      _emailController.text.trim(),
+                                      _passwordController.text.trim(),
+                                    );
+                              }
                             },
                             child: Text(
                               "Register",

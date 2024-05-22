@@ -1,13 +1,11 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:tripster/data/cubits/auth_cubit/auth_cubit.dart';
-import 'package:tripster/data/cubits/auth_cubit/auth_state.dart';
-import 'package:tripster/data/providers/theme_providers.dart';
+import 'package:tripster/presentation/providers/theme_providers.dart';
 import 'package:tripster/presentation/screens/auth/sign_in_screen.dart';
 import 'package:tripster/presentation/screens/auth/sign_up_screen.dart';
 import 'package:tripster/presentation/screens/home/home_screen.dart';
 import 'package:tripster/presentation/screens/landmark_recognation/landmark_recognation.dart';
 import 'package:tripster/presentation/screens/menu/menu_screen.dart';
+import 'package:tripster/presentation/screens/profile/my_profile_screen.dart';
 import 'package:tripster/utils/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,6 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('token');
+  print('user token in main $token');
   runApp(
     MyApp(token: token),
   );
@@ -44,6 +43,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    print('tiken in main build ${widget.token}');
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => themeChangeProvider),
@@ -55,10 +55,14 @@ class _MyAppState extends State<MyApp> {
           title: 'Tripster',
           initialRoute: widget.token == null ? '/signIn' : '/menu',
           routes: {
-            '/': (context) => const MenuScreen(),
-            '/menu': (context) => const MenuScreen(),
+            '/profile': (context) => ProfileScreen(
+                  token: widget.token,
+                ),
+            '/menu': (context) => MenuScreen(
+                  token: widget.token,
+                ),
             '/home': (context) => const HomeScreen(),
-            '/landmark-recognition': (context) => const LandmarkRecognition(),
+            '/landmark-recognition': (context) => LandmarkRecognition(),
             '/signIn': (context) => const SignInScreen(),
             '/signUp': (context) => const SignUpScreen(),
           },

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tripster/utils/theme/dark_theme.dart';
+import 'package:tripster/utils/dark_theme/dark_theme.dart';
 
 class DarkThemeProvider with ChangeNotifier {
   DarkTheme darkThemePreference = DarkTheme();

@@ -15,25 +15,25 @@ class Vacation {
     required this.fullBudget,
   });
 
-  // Vacation.parseJson(Map<String, dynamic> json) {
-  //   vacationId = json['vacationId'];
-  //   name = json['name'];
-  //   dateStart = json['dateStart'];
-  //   dateEnd = json['dateEnd'];
-  //   location = json['location'];
-  //   fullBudget = json['fullBudget'];
-  // }
+  Vacation.parseJson(Map<String, dynamic> json) {
+    vacationId = json['vacationId'];
+    name = json['name'];
+    dateStart = json['dateStart'];
+    dateEnd = json['dateEnd'];
+    location = json['location'];
+    fullBudget = json['fullBudget'];
+  }
 
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> data = <String, dynamic>{};
-  //   data['name'] = name;
-  //   data['dateStart'] = dateStart.toIso8601String();
-  //   data['vacationId'] = vacationId;
-  //   data['dateEnd'] = dateEnd;
-  //   data['dateStart'] = dateEnd.toIso8601String();
-  //   data['location'] = location;
-  //   return data;
-  // }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['dateStart'] = dateStart.toIso8601String();
+    data['vacationId'] = vacationId;
+    data['dateEnd'] = dateEnd;
+    data['dateStart'] = dateEnd.toIso8601String();
+    data['location'] = location;
+    return data;
+  }
 }
 
 List<Vacation> vacations = [

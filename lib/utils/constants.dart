@@ -15,6 +15,7 @@ Color kErrorColorDark = HexColor("#ff4d4d");
 
 const smallSizedBoxWidth = SizedBox(width: 10.0);
 const smallerSizedBoxWidth = SizedBox(width: 4.0);
+const smallerSizedBoxHeight = SizedBox(height: 4.0);
 const smallSizedBoxHeight = SizedBox(height: 10.0);
 const mediumSizedBoxHeight = SizedBox(height: 20.0);
 // spacer
@@ -30,6 +31,7 @@ const divider = Divider(
 // padding
 const smallerPadding = EdgeInsets.all(3.0);
 const smallPadding = EdgeInsets.all(8.0);
+const midPadding = EdgeInsets.all(13.0);
 const largePadding = EdgeInsets.all(20.0);
 const leftBottomPadding = EdgeInsets.fromLTRB(
   10.0,
