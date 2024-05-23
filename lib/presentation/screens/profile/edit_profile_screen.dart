@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -10,9 +11,13 @@ import 'package:tripster/utils/constants.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final ProfileCubit profileCubit;
-  final ProfileUser userInfo;
+  final ProfileUser? userInfo;
+  final String? token;
   const EditProfileScreen(
-      {super.key, required this.profileCubit, required this.userInfo});
+      {super.key,
+      required this.profileCubit,
+      required this.userInfo,
+      required this.token});
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -28,9 +33,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.userInfo != null) {
+      _nameController.text = widget.userInfo!.name;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(minHeight: 400),
+      constraints: const BoxConstraints(minHeight: 500),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(40.0),
@@ -89,7 +102,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 smallSizedBoxHeight,
                 TextAccentButton(
                   height: 50,
-                  onTap: () {},
+                  onTap: () async {
+                    widget.profileCubit.updateUserProfile(
+                      widget.token!,
+                      _nameController.text,
+                      _image,
+                    );
+                    Navigator.pop(context);
+                  },
                   child: Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 34, vertical: 1),
@@ -103,6 +123,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
       ),
     );
+  }
+
+  Future<String?> _convertImageToBase64(File? image) async {
+    if (image == null) return null;
+    final bytes = await image.readAsBytes();
+    return base64Encode(bytes);
   }
 
   Widget _selectPhoto() {

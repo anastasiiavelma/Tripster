@@ -20,19 +20,9 @@ class CollectionWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Icon(Icons.sort, color: Theme.of(context).colorScheme.onBackground),
-            TextButton(
-              onPressed: () {
-                profileCubit.logout(context);
-                Navigator.of(context).pop();
-              },
-              child: Text("Выйти"),
-            ),
             Text(
               'My collections',
-              style: TextStyle(
-                color: kPrimaryColor,
-                fontSize: mediumLargeTextSize,
-              ),
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             Icon(Icons.filter_list,
                 color: Theme.of(context).colorScheme.onBackground),

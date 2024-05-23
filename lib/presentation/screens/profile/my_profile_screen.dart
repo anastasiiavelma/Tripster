@@ -1,12 +1,13 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripster/domain/models/user_model.dart';
 import 'package:tripster/presentation/cubits/profile_cubit/profile_cubit.dart';
 import 'package:tripster/presentation/cubits/profile_cubit/profile_state.dart';
 import 'package:tripster/data/repository/profile_repository.dart';
 import 'package:tripster/presentation/screens/gallery/collection_photo_widget.dart';
 import 'package:tripster/presentation/screens/profile/edit_profile_screen.dart';
-import 'package:tripster/presentation/screens/settings/settings_screen.dart';
+import 'package:tripster/presentation/screens/profile/user_info_widget.dart';
 import 'package:tripster/presentation/widgets/add_collection_dialog.dart';
 import 'package:tripster/utils/constants.dart';
 
@@ -45,92 +46,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   return Row(
                     children: [
-                      UserPhotoWidget(),
+                      UserPhotoWidget(
+                          token: widget.token,
+                          userInfo: userInfo,
+                          profileCubit: profileCubit),
                       smallSizedBoxWidth,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 40,
-                            width: MediaQuery.of(context).size.width / 2,
-                            child: FadeInUp(
-                              duration: const Duration(milliseconds: 800),
-                              child: Text(
-                                maxLines: 1,
-                                userInfo.name,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            child: FadeInUp(
-                              duration: const Duration(milliseconds: 800),
-                              child: Text(
-                                userInfo.email,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style:
-                                    Theme.of(context).textTheme.headlineMedium,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          FadeInUp(
-                            duration: const Duration(milliseconds: 800),
-                            child: GestureDetector(
-                              onTap: () => showModalBottomSheet(
-                                  backgroundColor:
-                                      Theme.of(context).colorScheme.background,
-                                  isScrollControlled: true,
-                                  context: context,
-                                  builder: (context) {
-                                    return EditProfileScreen(
-                                      profileCubit: profileCubit,
-                                      userInfo: userInfo,
-                                    );
-                                  }),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Edit profile",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
-                                      ),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => SettingScreen(
-                                              profileCubit: profileCubit)),
-                                    ),
-                                    icon: Icon(
-                                      Icons.settings,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground,
-                                      size: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      smallSizedBoxWidth,
+                      UserInfoWidget(
+                          token: widget.token,
+                          userInfo: userInfo,
+                          profileCubit: profileCubit),
                     ],
                   );
                 } else if (state is ProfileError) {
@@ -188,24 +113,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
 }
 
 class UserPhotoWidget extends StatelessWidget {
+  final ProfileUser userInfo;
+  final String? token;
+  final ProfileCubit profileCubit;
   const UserPhotoWidget({
     super.key,
+    required this.userInfo,
+    required this.token,
+    required this.profileCubit,
   });
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        SizedBox(
-          width: 150,
-          height: 150,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            child: const Image(
-              image: AssetImage('assets/images/traveller.png'),
-            ),
-          ),
-        ),
+        userInfo.avatarUrl == null || userInfo.avatarUrl!.isEmpty
+            ? SizedBox(
+                width: 150,
+                height: 150,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: const Image(
+                    image: AssetImage('assets/images/traveller.png'),
+                  ),
+                ),
+              )
+            : SizedBox(
+                width: 150,
+                height: 150,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: checkUrl(userInfo.avatarUrl!)),
+              ),
         Positioned(
           bottom: 0,
           right: 0,
@@ -218,15 +157,39 @@ class UserPhotoWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(100),
                 color: kAccentColor,
               ),
-              child: const Icon(
-                Icons.edit,
-                color: Colors.black,
-                size: 20,
+              child: GestureDetector(
+                onTap: () => showModalBottomSheet(
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context) {
+                      return EditProfileScreen(
+                        token: token,
+                        profileCubit: profileCubit,
+                        userInfo: userInfo,
+                      );
+                    }),
+                child: const Icon(
+                  Icons.edit,
+                  color: Colors.black,
+                  size: 20,
+                ),
               ),
             ),
           ),
         ),
       ],
     );
+  }
+
+  Widget checkUrl(String url) {
+    try {
+      return Image.network(
+        url,
+        fit: BoxFit.cover,
+      );
+    } catch (e) {
+      return Icon(Icons.image);
+    }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripster/presentation/cubits/profile_cubit/profile_state.dart';
@@ -14,6 +16,28 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       final userProfile = await profileRepository.getUserProfile(token);
       print(userProfile);
+      if (userProfile != null) {
+        emit(ProfileLoaded(userProfile));
+      } else {
+        emit(ProfileUnauthenticated());
+      }
+    } catch (e) {
+      emit(ProfileError('Failed to load user: $e'));
+    }
+  }
+
+  Future<void> updateUserProfile(
+      String? token, String name, File? avatar) async {
+    try {
+      final updateData = {
+        'name': name,
+        'avatar': avatar,
+      };
+
+      final userProfile =
+          await profileRepository.updateProfile(token!, updateData);
+      print(userProfile);
+
       if (userProfile != null) {
         emit(ProfileLoaded(userProfile));
       } else {

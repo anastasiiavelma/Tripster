@@ -6,10 +6,12 @@ import 'package:tripster/presentation/screens/profile/edit_profile_screen.dart';
 import 'package:tripster/presentation/screens/settings/settings_screen.dart';
 
 class UserInfoWidget extends StatelessWidget {
+  final String? token;
   const UserInfoWidget({
     super.key,
     required this.userInfo,
     required this.profileCubit,
+    required this.token,
   });
 
   final ProfileUser userInfo;
@@ -55,6 +57,7 @@ class UserInfoWidget extends StatelessWidget {
                 context: context,
                 builder: (context) {
                   return EditProfileScreen(
+                    token: token,
                     profileCubit: profileCubit,
                     userInfo: userInfo,
                   );

@@ -3,6 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import './constants.dart';
 
 ThemeData basicTheme(bool isDarkTheme, BuildContext context) => ThemeData(
+      textSelectionTheme: TextSelectionThemeData(
+        selectionColor: kAccentColor,
+        selectionHandleColor: kBackgroundColor,
+      ),
       colorScheme: isDarkTheme
           ? ColorScheme.dark(
               background: kBackgroundColor,

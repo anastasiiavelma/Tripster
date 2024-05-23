@@ -12,6 +12,8 @@ class CustomTextField extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
+          cursorColor: Theme.of(context).colorScheme.onBackground,
+
           maxLines: maxLines ?? 1,
           controller: controller,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
