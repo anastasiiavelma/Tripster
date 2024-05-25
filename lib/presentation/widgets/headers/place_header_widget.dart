@@ -41,11 +41,13 @@ class HeaderDecorationWidget extends StatelessWidget {
             left: 150,
             top: 100,
             child: FadeInUp(
-              duration: const Duration(milliseconds: 1600),
+              duration: const Duration(milliseconds: 800),
               child: Center(
                 child: Text(
                   "Welcome!",
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.background,
+                      ),
                 ),
               ),
             ),
@@ -58,12 +60,9 @@ class HeaderDecorationWidget extends StatelessWidget {
               child: Center(
                 child: Text(
                   "Let`s discover!",
-                  style: TextStyle(
-                    color: kPrimaryColor,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Roboto',
-                    fontSize: mediumLargeTextSize,
-                  ),
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.background,
+                      ),
                 ),
               ),
             ),

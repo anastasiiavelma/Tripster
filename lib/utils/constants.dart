@@ -13,6 +13,13 @@ Color kTexFieldColor = Colors.grey;
 Color kErrorColorLight = HexColor("#cc0000");
 Color kErrorColorDark = HexColor("#ff4d4d");
 
+Color kBackgroundColorDark = HexColor("#045353");
+Color kPrimaryColorDark = Colors.black87;
+Color kAccentColorDark = HexColor("#b89aa6");
+Color kTextFieldColorDark = Colors.black54;
+Color kErrorColorLightDark = HexColor("#cc0000");
+Color kErrorColorDarkDark = HexColor("#ff0000");
+
 const smallSizedBoxWidth = SizedBox(width: 10.0);
 const smallerSizedBoxWidth = SizedBox(width: 4.0);
 const smallerSizedBoxHeight = SizedBox(height: 4.0);

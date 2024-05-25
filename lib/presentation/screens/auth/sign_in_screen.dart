@@ -38,6 +38,7 @@ class _SignInScreenState extends State<SignInScreen> {
           child: BlocConsumer<AuthCubit, AuthState>(
             listener: (context, state) {
               if (state is AuthLoading) {
+                CircularProgressIndicator();
               } else if (state is AuthAuthenticated) {
                 final token = state.token;
                 print('================');

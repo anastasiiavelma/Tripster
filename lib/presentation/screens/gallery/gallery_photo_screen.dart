@@ -45,7 +45,7 @@ class PhotoGalleryState extends State<PhotoGallery> {
   Widget build(BuildContext context) {
     final DateFormat dayMonthFormat = DateFormat('dd MMMM');
     final DateFormat yearFormat = DateFormat('yyyy');
-    final List<String> _imageGallery = widget.gallery.imageUrls!;
+    final List<File> _imageGallery = widget.gallery.imageUrls!;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: PreferredSize(
@@ -67,15 +67,15 @@ class PhotoGalleryState extends State<PhotoGallery> {
                 ),
                 smallerSizedBoxHeight,
                 Text(
-                  '${yearFormat.format(widget.gallery.vacation.dateStart)}, '
-                  '${dayMonthFormat.format(widget.gallery.vacation.dateStart)} - ${dayMonthFormat.format(widget.gallery.vacation.dateEnd)}',
+                  '${yearFormat.format(widget.gallery.vacation.endDate)}, '
+                  '${dayMonthFormat.format(widget.gallery.vacation.startDate)} - ${dayMonthFormat.format(widget.gallery.vacation.endDate)}',
                   style: TextStyle(
                       fontSize: 10.0,
                       color: Theme.of(context).colorScheme.background),
                 ),
                 smallerSizedBoxHeight,
                 Text(
-                  widget.gallery.vacation.location,
+                  widget.gallery.vacation.countryName,
                   style: TextStyle(
                       fontSize: 10.0,
                       color: Theme.of(context).colorScheme.background),
@@ -101,7 +101,7 @@ class PhotoGalleryState extends State<PhotoGallery> {
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.network(
-                      image,
+                      image as String,
                       fit: BoxFit.cover,
                       height: 150,
                       width: 200,

@@ -19,28 +19,41 @@ class AddressWidget extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
-          final country = snapshot.data!['country'];
-          final city = snapshot.data!['city'];
+          final country = snapshot.data?['country'];
+          final city = snapshot.data?['city'];
           return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(Icons.location_on,
-                  color: Theme.of(context).colorScheme.onBackground),
+                  color: Theme.of(context).colorScheme.background),
               smallSizedBoxWidth,
-              Text(
-                '$country',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(fontSize: 18),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    '$country',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(fontSize: 15),
+                  ),
+                  city!.isNotEmpty
+                      ? Text(
+                          '$city',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(
+                                  fontSize: 12, fontWeight: FontWeight.w400),
+                        )
+                      : SizedBox(
+                          height: 3,
+                        ),
+                ],
               ),
-              if (city != null)
-                Text(
-                  ' $city',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(fontSize: 15, fontWeight: FontWeight.w400),
-                ),
             ],
           );
         }

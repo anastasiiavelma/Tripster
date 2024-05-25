@@ -30,7 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: leftBottomPadding,
               child: Text(
                 'Recommended places',
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground,
+                    ),
               ),
             ),
             PlaceListWidget(),

@@ -1,13 +1,34 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripster/data/repository/vacation_repository.dart';
 import 'package:tripster/domain/models/vacation_model.dart';
+import 'package:tripster/presentation/cubits/vacation_cubit/vacation_cubit.dart';
+import 'package:tripster/presentation/screens/home/maps.dart';
 import 'package:tripster/presentation/screens/planning_trip/detail_plan_screen.dart';
 import 'package:tripster/presentation/widgets/buttons/change_theme_button.dart';
 import 'package:tripster/utils/constants.dart';
 
-class PlanTripScreen extends StatelessWidget {
+class PlanTripScreen extends StatefulWidget {
   final String? token;
   const PlanTripScreen({super.key, this.token});
+
+  @override
+  State<PlanTripScreen> createState() => _PlanTripScreenState();
+}
+
+class _PlanTripScreenState extends State<PlanTripScreen> {
+  late final VacationCubit vacationCubit;
+  final VacationRepository _vacationRepository = VacationRepository();
+  @override
+  void initState() {
+    vacationCubit = VacationCubit(_vacationRepository);
+    vacationCubit.fetchUserVacations(widget.token);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,34 +37,60 @@ class PlanTripScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            centerTitle: true,
+            expandedHeight: MediaQuery.of(context).size.height * 0.11,
+            floating: true,
+            pinned: false,
             automaticallyImplyLeading: false,
-            title: Row(
-              children: [
-                // !!! to-do: delete
-                ThemeButton(),
-                Text(
-                  'My trips',
-                  style: TextStyle(fontSize: 30.0),
+            backgroundColor: Theme.of(context).colorScheme.background,
+            surfaceTintColor: Theme.of(context).colorScheme.background,
+            flexibleSpace: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+              return FlexibleSpaceBar(
+                centerTitle: true,
+                titlePadding: EdgeInsets.only(
+                  left: 0,
+                  top: constraints.maxHeight - 70,
+                  bottom: 10,
                 ),
-              ],
-            ),
-            backgroundColor: Colors.transparent,
-            expandedHeight: 110.0,
-            flexibleSpace: ClipRRect(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(40.0),
-                bottomRight: Radius.circular(40.0),
-              ),
-              child: Container(
-                height: 110,
-                color: Theme.of(context).colorScheme.tertiary,
-              ),
-            ),
+                title: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // !!! to-do: delete
+                    ThemeButton(),
+                    Text(
+                      'My trips',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineMedium
+                          ?.copyWith(
+                              fontSize: 22,
+                              color: Theme.of(context).colorScheme.background,
+                              fontWeight: FontWeight.bold),
+                    ),
+                    smallSizedBoxHeight,
+                  ],
+                ),
+                background: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(40.0),
+                    bottomRight: Radius.circular(40.0),
+                  ),
+                  child: Container(
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
+                ),
+              );
+            }),
           ),
           SliverPadding(
             padding: smallerPadding,
-            sliver: PlanTripListWidget(),
+            sliver: BlocProvider(
+              create: (context) => vacationCubit,
+              child: PlanTripListWidget(
+                  token: widget.token, vacationCubit: vacationCubit),
+            ),
           ),
         ],
       ),
@@ -51,35 +98,75 @@ class PlanTripScreen extends StatelessWidget {
   }
 }
 
-class PlanTripListWidget extends StatelessWidget {
+class PlanTripListWidget extends StatefulWidget {
+  final String? token;
+  final VacationCubit vacationCubit;
+  const PlanTripListWidget({
+    super.key,
+    this.token,
+    required this.vacationCubit,
+  });
+
+  @override
+  State<PlanTripListWidget> createState() => _PlanTripListWidgetState();
+}
+
+class _PlanTripListWidgetState extends State<PlanTripListWidget> {
   @override
   Widget build(BuildContext context) {
-    return SliverGrid(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 1,
-        crossAxisSpacing: 5.0,
-        mainAxisSpacing: 5.0,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          final vacation = vacations[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailPlanTripScreen(
-                      vacation: vacation,
-                    ),
-                  ));
-            },
-            child: FadeInDown(
-                duration: const Duration(milliseconds: 800),
-                child: CardWidget(vacation: vacation)),
+    return BlocBuilder<VacationCubit, VacationState>(
+      builder: (context, state) {
+        if (state is VacationLoading) {
+          return SliverToBoxAdapter(
+            child: Center(
+                child: Padding(
+              padding: const EdgeInsets.only(top: 50),
+              child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(kAccentColor)),
+            )),
           );
-        },
-        childCount: vacations.length,
-      ),
+        } else if (state is VacationsLoaded) {
+          final vacations = state.vacations;
+          return SliverGrid(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1,
+              crossAxisSpacing: 5.0,
+              mainAxisSpacing: 5.0,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                final vacation = vacations[index];
+                return GestureDetector(
+                  onTap: () async {
+                    await Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => BlocProvider.value(
+                              value: widget.vacationCubit,
+                              child: DetailPlanTripScreen(
+                                vacation: vacation,
+                                token: widget.token,
+                                vacationCubit: widget.vacationCubit,
+                              ),
+                            )));
+                    widget.vacationCubit.fetchUserVacations(widget.token);
+                  },
+                  child: FadeInDown(
+                      duration: const Duration(milliseconds: 800),
+                      child: CardWidget(vacation: vacation)),
+                );
+              },
+              childCount: vacations.length,
+            ),
+          );
+        } else if (state is VacationError) {
+          return SliverToBoxAdapter(
+            child: Center(child: Text("Error: ${state.message}")),
+          );
+        } else {
+          return SliverToBoxAdapter(
+            child: Center(child: Text("No vacations available")),
+          );
+        }
+      },
     );
   }
 }
@@ -93,6 +180,8 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DateFormat dayMonthFormat = DateFormat('dd MMMM');
+    final DateFormat yearFormat = DateFormat('yyyy');
     return Padding(
       padding: smallerPadding,
       child: Card(
@@ -104,86 +193,77 @@ class CardWidget extends StatelessWidget {
           padding: const EdgeInsets.only(top: 10.0),
           child: Container(
             alignment: Alignment.topCenter,
-            width: 130,
+            width: 120,
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                      'https://images.unsplash.com/photo-1569622296640-38737c1d82de?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                      height: 200.0,
-                      width: double.infinity,
-                      fit: BoxFit.cover),
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Maps(
+                      latitude: vacation.countryLat!,
+                      longitude: vacation.countryLon!,
+                    ),
+                  ),
                 ),
                 smallSizedBoxHeight,
                 Text(
-                    overflow: TextOverflow.clip,
-                    maxLines: 1,
-                    vacation.name,
-                    style: Theme.of(context).textTheme.headlineLarge
-                    // ?.copyWith(color: kBackgroundColor),
-                    ),
+                  overflow: TextOverflow.clip,
+                  maxLines: 1,
+                  vacation.name,
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.background,
+                      ),
+                ),
                 smallSizedBoxHeight,
                 Row(
                   children: [
-                    Icon(Icons.location_on, color: kBackgroundColor),
+                    Icon(
+                      Icons.location_on,
+                      color: Theme.of(context).colorScheme.background,
+                    ),
                     smallerSizedBoxWidth,
                     Text(
-                      vacation.location,
-                      style: Theme.of(context).textTheme.displayLarge,
+                      vacation.countryName,
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
                   ],
                 ),
                 smallSizedBoxHeight,
                 Row(
                   children: [
-                    Icon(Icons.date_range_outlined, color: kBackgroundColor),
+                    Icon(Icons.date_range_outlined,
+                        color: Theme.of(context).colorScheme.background),
                     smallerSizedBoxWidth,
                     Text(
-                      vacation.dateStart.toString().substring(0, 10),
-                      style: Theme.of(context)
-                          .textTheme
-                          .displayLarge
-                          ?.copyWith(fontWeight: FontWeight.normal),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      ' — ',
-                      style: Theme.of(context)
-                          .textTheme
-                          .displayLarge
-                          ?.copyWith(fontWeight: FontWeight.normal),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      vacation.dateEnd.toString().substring(0, 10),
-                      style: Theme.of(context)
-                          .textTheme
-                          .displayLarge
-                          ?.copyWith(fontWeight: FontWeight.normal),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                        '${yearFormat.format(vacation.endDate)}, '
+                        '${dayMonthFormat.format(vacation.startDate)} - ${dayMonthFormat.format(vacation.endDate)}',
+                        style: Theme.of(context).textTheme.headlineSmall),
                   ],
                 ),
                 smallSizedBoxHeight,
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(Icons.money_outlined, color: Color(0xFF6e191d)),
-                    smallerSizedBoxWidth,
-                    Text(
-                      '${vacation.fullBudget.toString()} Dollars',
-                      style: Theme.of(context)
-                          .textTheme
-                          .displayLarge
-                          ?.copyWith(color: Color(0xFF6e191d)),
-                    ),
-                  ],
-                ),
+                vacation.fullBudget != null
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.money_outlined, color: Color(0xFF6e191d)),
+                          smallerSizedBoxWidth,
+                          Text(
+                            '${vacation.fullBudget.toString()} Dollars',
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayLarge
+                                ?.copyWith(color: Color(0xFF6e191d)),
+                          ),
+                        ],
+                      )
+                    : SizedBox(
+                        height: 1,
+                      ),
+                smallSizedBoxHeight,
               ],
             ),
           ),

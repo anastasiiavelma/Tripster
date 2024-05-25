@@ -46,7 +46,7 @@ class PlanDayWidget extends StatelessWidget {
                     ?.copyWith(color: kBackgroundColor),
               ),
               Text(
-                '${DateFormat('dd').format(day.createdAt)} ${DateFormat('MMMM').format(day.createdAt)}',
+                '${DateFormat('dd').format(day.date)} ${DateFormat('MMMM').format(day.date)}',
                 style: Theme.of(context)
                     .textTheme
                     .headlineMedium
@@ -84,18 +84,18 @@ class PlanDayWidget extends StatelessWidget {
                 .titleMedium
                 ?.copyWith(color: kBackgroundColor),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: day.place!
-                .map((place) => Text(
-                      '• ${place.name}',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineMedium
-                          ?.copyWith(color: kBackgroundColor),
-                    ))
-                .toList(),
-          ),
+          // Column(
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: day.places!
+          //       .map((place) => Text(
+          //             '• ${place.name}',
+          //             style: Theme.of(context)
+          //                 .textTheme
+          //                 .headlineMedium
+          //                 ?.copyWith(color: kBackgroundColor),
+          //           ))
+          //       .toList(),
+          // ),
           smallSizedBoxHeight,
           Text(
             'Notes:',
@@ -106,7 +106,7 @@ class PlanDayWidget extends StatelessWidget {
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: day.notes
+            children: day.notes!
                 .take(2)
                 .map((note) => Text(
                       maxLines: 2,

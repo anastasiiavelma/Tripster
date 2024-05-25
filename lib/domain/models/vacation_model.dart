@@ -1,56 +1,62 @@
+import 'package:tripster/domain/models/gallery_model.dart';
+import 'package:tripster/domain/models/vacation_day_model.dart';
+
 class Vacation {
-  late String vacationId;
-  late String name;
-  late String location;
-  late DateTime dateStart;
-  late DateTime dateEnd;
-  late String fullBudget;
+  final String vacationId;
+  final String name;
+  final String countryName;
+  final double? countryLat;
+  final double? countryLon;
+  final List<String>? cities;
+  final List<String>? places;
+  final List<VacationDay> days;
+  final double? fullBudget;
+  final String? gallery;
+  final DateTime startDate;
+  final DateTime endDate;
 
   Vacation({
     required this.vacationId,
     required this.name,
-    required this.dateStart,
-    required this.dateEnd,
-    required this.location,
+    required this.startDate,
+    required this.endDate,
+    required this.countryName,
+    required this.cities,
+    required this.places,
+    required this.days,
+    required this.countryLat,
+    required this.countryLon,
     required this.fullBudget,
+    required this.gallery,
   });
 
-  Vacation.parseJson(Map<String, dynamic> json) {
-    vacationId = json['vacationId'];
-    name = json['name'];
-    dateStart = json['dateStart'];
-    dateEnd = json['dateEnd'];
-    location = json['location'];
-    fullBudget = json['fullBudget'];
+  factory Vacation.fromJson(Map<String, dynamic> json) {
+    return Vacation(
+      vacationId: json['_id'] ?? '',
+      name: json['name'] ?? '',
+      countryName: json['country']['name'] ?? '',
+      countryLat: (json['country']['location']['lat'] as num).toDouble(),
+      countryLon: (json['country']['location']['lon'] as num).toDouble(),
+      cities: json['cities'] != null ? List<String>.from(json['cities']) : [],
+      places: json['places'] != null ? List<String>.from(json['places']) : [],
+      days: (json['days'] as List)
+          .map((dayJson) => VacationDay.fromJson(dayJson))
+          .toList(),
+      fullBudget: json['fullBudget'] != null
+          ? (json['fullBudget'] as num).toDouble()
+          : null,
+      gallery: json['gallery'] ?? '',
+      startDate: DateTime.parse(json['dateDiapazone']['startDate']),
+      endDate: DateTime.parse(json['dateDiapazone']['endDate']),
+    );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
-    data['dateStart'] = dateStart.toIso8601String();
-    data['vacationId'] = vacationId;
-    data['dateEnd'] = dateEnd;
-    data['dateStart'] = dateEnd.toIso8601String();
-    data['location'] = location;
+    data['startDate'] = startDate.toIso8601String();
+    data['_id'] = vacationId;
+    data['endDate'] = endDate.toIso8601String();
     return data;
   }
 }
-
-List<Vacation> vacations = [
-  Vacation(
-    vacationId: '1',
-    name: 'Summer Trip to Europe',
-    dateStart: DateTime(2024, 6, 15),
-    dateEnd: DateTime(2024, 7, 5),
-    location: 'Europe',
-    fullBudget: '5000',
-  ),
-  Vacation(
-    vacationId: '2',
-    name: 'Winter Ski Trip',
-    dateStart: DateTime(2024, 12, 20),
-    dateEnd: DateTime(2024, 12, 27),
-    location: 'Aspen, Colorado',
-    fullBudget: '8000',
-  ),
-];

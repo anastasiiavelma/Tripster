@@ -47,9 +47,9 @@ class NoteInTripDaysWidget extends StatelessWidget {
               height: 550,
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: day.notes.length,
+                itemCount: day.notes!.length,
                 itemBuilder: (context, index) {
-                  final note = day.notes[index];
+                  final note = day.notes![index];
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 3, vertical: 3),
                     child: Container(

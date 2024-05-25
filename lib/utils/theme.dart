@@ -9,16 +9,16 @@ ThemeData basicTheme(bool isDarkTheme, BuildContext context) => ThemeData(
       ),
       colorScheme: isDarkTheme
           ? ColorScheme.dark(
-              background: kBackgroundColor,
-              onBackground: kPrimaryColor,
-              primary: kPrimaryColor,
-              tertiary: kAccentColor,
+              background: kBackgroundColorDark,
+              onBackground: kPrimaryColorDark,
+              primary: kPrimaryColorDark,
+              tertiary: kAccentColorDark,
               secondary: kTexFieldColor,
-              onSurface: kPrimaryColor,
-              shadow: kBackgroundColor,
-              onPrimary: kBackgroundColor,
-              surface: kAccentColor,
-              onError: kErrorColorDark,
+              onSurface: kPrimaryColorDark,
+              shadow: kBackgroundColorDark,
+              onPrimary: kBackgroundColorDark,
+              surface: kAccentColorDark,
+              onError: kErrorColorDarkDark,
             )
           : ColorScheme.light(
               background: kPrimaryColor,

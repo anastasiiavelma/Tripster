@@ -12,9 +12,13 @@ class PlaceCubit extends Cubit<PlaceState> {
     emit(PlaceLoading());
     try {
       final List<Place> places = await placeRepository.getPlaces();
-      emit(PlaceLoaded(places));
+      if (!isClosed) {
+        emit(PlaceLoaded(places));
+      }
     } catch (e) {
-      emit(PlaceError('Failed to load places: $e'));
+      if (!isClosed) {
+        emit(PlaceError('Failed to load places: $e'));
+      }
     }
   }
 }

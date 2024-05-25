@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripster/data/repository/vacation_repository.dart';
+import 'package:tripster/presentation/cubits/vacation_cubit/vacation_cubit.dart';
 import 'package:tripster/presentation/providers/theme_providers.dart';
 import 'package:tripster/presentation/screens/auth/sign_in_screen.dart';
 import 'package:tripster/presentation/screens/auth/sign_up_screen.dart';
@@ -43,9 +46,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    print('tiken in main build ${widget.token}');
+    print('token in main build ${widget.token}');
     return MultiProvider(
       providers: [
+        BlocProvider(
+          create: (context) => VacationCubit(VacationRepository()),
+        ),
         ChangeNotifierProvider(create: (context) => themeChangeProvider),
       ],
       child: Consumer<DarkThemeProvider>(

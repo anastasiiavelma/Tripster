@@ -44,7 +44,9 @@ class PlaceCardWidget extends StatelessWidget {
                   smallSizedBoxHeight,
                   Text(
                     place.name,
-                    style: Theme.of(context).textTheme.headlineLarge,
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.background,
+                        ),
                   ),
                   smallSizedBoxHeight,
                   Text(
@@ -52,14 +54,15 @@ class PlaceCardWidget extends StatelessWidget {
                     maxLines: 2,
                     style: Theme.of(context)
                         .textTheme
-                        .displayLarge
-                        ?.copyWith(fontWeight: FontWeight.w400, fontSize: 17),
+                        .headlineMedium
+                        ?.copyWith(fontWeight: FontWeight.w400, fontSize: 13),
                     overflow: TextOverflow.ellipsis,
                   ),
                   smallSizedBoxHeight,
                   smallSizedBoxHeight,
                   AddressWidget(
                       latitude: place.latitude, longitude: place.longitude),
+                  smallSizedBoxHeight,
                   smallSizedBoxHeight,
                 ],
               ),
