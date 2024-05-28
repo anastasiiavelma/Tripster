@@ -63,42 +63,4 @@ class VacationCubit extends Cubit<VacationState> {
       emit(VacationError(e.toString()));
     }
   }
-
-  Future<void> createNote({
-    required String title,
-    required String description,
-    required String vacationDayId,
-    required String? token,
-  }) async {
-    try {
-      emit(VacationLoading());
-      final note = await vacationRepository.createNote(
-        title: title,
-        description: description,
-        vacationDayId: vacationDayId,
-        token: token,
-      );
-      emit(NoteCreated(note));
-    } catch (e) {
-      emit(VacationError(e.toString()));
-    }
-  }
-
-  Future<void> deleteNote({
-    required String noteId,
-    required String vacationDayId,
-    required String? token,
-  }) async {
-    try {
-      emit(VacationLoading());
-      await vacationRepository.deleteNote(
-        noteId: noteId,
-        vacationDayId: vacationDayId,
-        token: token,
-      );
-      emit(NoteDeleted());
-    } catch (e) {
-      emit(VacationError(e.toString()));
-    }
-  }
 }

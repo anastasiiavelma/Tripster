@@ -125,12 +125,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Future<String?> _convertImageToBase64(File? image) async {
-    if (image == null) return null;
-    final bytes = await image.readAsBytes();
-    return base64Encode(bytes);
-  }
-
   Widget _selectPhoto() {
     return Container(
       decoration: BoxDecoration(

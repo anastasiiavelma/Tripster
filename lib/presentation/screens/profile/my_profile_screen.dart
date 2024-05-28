@@ -85,28 +85,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     topRight: Radius.circular(40.0),
                   ),
                 ),
-                child: Column(
-                  children: [
-                    CollectionWidget(profileCubit: profileCubit),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    Expanded(
-                      child: ListOfCollectionPhotosWidget(),
-                    ),
-                  ],
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(40.0),
+                    topRight: Radius.circular(40.0),
+                  ),
+                  child: ListOfCollectionPhotosWidget(
+                    token: widget.token,
+                  ),
                 ),
               ),
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).colorScheme.onBackground,
-        onPressed: () {
-          CollectionDialog.show(context);
-        },
-        child: Icon(Icons.add, color: Theme.of(context).colorScheme.background),
       ),
     );
   }

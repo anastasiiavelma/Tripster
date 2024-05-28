@@ -46,3 +46,22 @@ const leftBottomPadding = EdgeInsets.fromLTRB(
   0.0,
   10.0,
 );
+CircularProgressIndicator getCircularProgressIndicator(
+  BuildContext context,
+) {
+  return CircularProgressIndicator(
+    strokeWidth: 2,
+    valueColor:
+        AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.background),
+  );
+}
+
+CircularProgressIndicator getCircularProgressIndicator2(
+  BuildContext context,
+) {
+  return CircularProgressIndicator(
+    strokeWidth: 2,
+    valueColor: AlwaysStoppedAnimation<Color>(
+        Theme.of(context).colorScheme.onBackground),
+  );
+}

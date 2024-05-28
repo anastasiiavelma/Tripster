@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripster/data/repository/place_repository.dart';
 import 'package:tripster/data/repository/vacation_repository.dart';
+import 'package:tripster/presentation/cubits/place_cubit/place_cubit.dart';
 import 'package:tripster/presentation/cubits/vacation_cubit/vacation_cubit.dart';
 import 'package:tripster/presentation/providers/theme_providers.dart';
 import 'package:tripster/presentation/screens/auth/sign_in_screen.dart';
@@ -51,6 +53,9 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider(
           create: (context) => VacationCubit(VacationRepository()),
+        ),
+        BlocProvider(
+          create: (context) => PlaceCubit(PlaceRepository()),
         ),
         ChangeNotifierProvider(create: (context) => themeChangeProvider),
       ],

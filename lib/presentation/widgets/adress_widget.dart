@@ -5,8 +5,8 @@ import 'package:tripster/utils/location_to_adress.dart';
 class AddressWidget extends StatelessWidget {
   final double latitude;
   final double longitude;
-
-  AddressWidget({required this.latitude, required this.longitude});
+  final Color? color;
+  AddressWidget({required this.latitude, required this.longitude, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class AddressWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(Icons.location_on,
-                  color: Theme.of(context).colorScheme.background),
+                  color: color ?? Theme.of(context).colorScheme.background),
               smallSizedBoxWidth,
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

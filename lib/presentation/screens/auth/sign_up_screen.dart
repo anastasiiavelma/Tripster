@@ -77,6 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             height: 20,
                           ),
                           TextAccentButton(
+                            state: state,
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
                                 context.read<AuthCubit>().registerUser(

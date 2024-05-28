@@ -9,7 +9,7 @@ class Vacation {
   final double? countryLon;
   final List<String>? cities;
   final List<String>? places;
-  final List<VacationDay> days;
+  final List<String>? days;
   final double? fullBudget;
   final String? gallery;
   final DateTime startDate;
@@ -39,9 +39,7 @@ class Vacation {
       countryLon: (json['country']['location']['lon'] as num).toDouble(),
       cities: json['cities'] != null ? List<String>.from(json['cities']) : [],
       places: json['places'] != null ? List<String>.from(json['places']) : [],
-      days: (json['days'] as List)
-          .map((dayJson) => VacationDay.fromJson(dayJson))
-          .toList(),
+      days: json['days'] != null ? List<String>.from(json['days']) : [],
       fullBudget: json['fullBudget'] != null
           ? (json['fullBudget'] as num).toDouble()
           : null,

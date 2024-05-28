@@ -9,7 +9,8 @@
     "RGBO",
     "Salomon",
     "traveller",
-    "Tripster"
+    "Tripster",
+    "xfile"
   ],
   "java.configuration.updateBuildConfiguration": "interactive",
   "cmake.sourceDirectory": "D:/diploma/tripster/linux"

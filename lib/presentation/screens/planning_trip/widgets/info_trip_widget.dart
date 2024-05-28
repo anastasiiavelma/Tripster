@@ -58,21 +58,10 @@ class _InformationAboutTripWidgetState
               smallSizedBoxHeight,
               Row(
                 children: [
-                  // Icon(Icons.location_on,
-                  //     color: Theme.of(context).colorScheme.onBackground),
                   AddressWidget(
+                      color: kAccentColor,
                       latitude: widget.vacation.countryLat!,
                       longitude: widget.vacation.countryLon!),
-                  // Text(
-                  //   widget.vacation.countryLat.toString(),
-                  //   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  //       fontSize: 15.0, fontWeight: FontWeight.normal),
-                  // ),
-                  // Text(
-                  //   widget.vacation.countryLon.toString(),
-                  //   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  //       fontSize: 15.0, fontWeight: FontWeight.normal),
-                  // ),
                 ],
               ),
               smallSizedBoxHeight,
@@ -83,7 +72,7 @@ class _InformationAboutTripWidgetState
               smallSizedBoxHeight,
               Row(
                 children: [
-                  Icon(Icons.date_range_outlined, color: kBackgroundColor),
+                  Icon(Icons.date_range_outlined, color: kAccentColor),
                   smallerSizedBoxWidth,
                   Text(
                       '${yearFormat.format(widget.vacation.endDate)}, '
@@ -95,24 +84,32 @@ class _InformationAboutTripWidgetState
                 ],
               ),
               smallSizedBoxHeight,
-              Text('Budget in this trip',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontSize: 15,
-                      )),
-              smallSizedBoxHeight,
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.money_outlined,
-                      color: Theme.of(context).colorScheme.onError),
-                  smallerSizedBoxWidth,
-                  Text(
-                    '${widget.vacation.fullBudget.toString()} Dollars',
-                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onError),
-                  ),
-                ],
-              ),
+              widget.vacation.fullBudget != null
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('Budget in this trip',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium
+                                ?.copyWith(
+                                  fontSize: 15,
+                                )),
+                        smallSizedBoxHeight,
+                        Icon(Icons.money_outlined, color: Color(0xFF6e191d)),
+                        smallerSizedBoxWidth,
+                        Text(
+                          '${widget.vacation.fullBudget.toString()} Dollars',
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayLarge
+                              ?.copyWith(color: Color(0xFF6e191d)),
+                        ),
+                      ],
+                    )
+                  : SizedBox(
+                      height: 1,
+                    ),
             ],
           ),
         ],

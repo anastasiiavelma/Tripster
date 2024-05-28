@@ -3,13 +3,14 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tripster/domain/models/gallery_model.dart';
+import 'package:tripster/domain/models/vacation_model.dart';
 import 'package:tripster/utils/constants.dart';
 import 'package:tripster/utils/shared_pref.dart';
 
 class PhotoGallery extends StatefulWidget {
   final Gallery gallery;
-
-  const PhotoGallery({Key? key, required this.gallery});
+  final Vacation vacation;
+  const PhotoGallery({Key? key, required this.gallery, required this.vacation});
   @override
   PhotoGalleryState createState() => PhotoGalleryState();
 }
@@ -45,7 +46,7 @@ class PhotoGalleryState extends State<PhotoGallery> {
   Widget build(BuildContext context) {
     final DateFormat dayMonthFormat = DateFormat('dd MMMM');
     final DateFormat yearFormat = DateFormat('yyyy');
-    final List<File> _imageGallery = widget.gallery.imageUrls!;
+    final List<String> _imageGallery = widget.gallery.imageUrls!;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: PreferredSize(
@@ -60,22 +61,22 @@ class PhotoGalleryState extends State<PhotoGallery> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.gallery.vacation.name,
+                  widget.vacation.name,
                   style: TextStyle(
                       fontSize: 20.0,
                       color: Theme.of(context).colorScheme.background),
                 ),
                 smallerSizedBoxHeight,
                 Text(
-                  '${yearFormat.format(widget.gallery.vacation.endDate)}, '
-                  '${dayMonthFormat.format(widget.gallery.vacation.startDate)} - ${dayMonthFormat.format(widget.gallery.vacation.endDate)}',
+                  '${yearFormat.format(widget.vacation.endDate)}, '
+                  '${dayMonthFormat.format(widget.vacation.startDate)} - ${dayMonthFormat.format(widget.vacation.endDate)}',
                   style: TextStyle(
                       fontSize: 10.0,
                       color: Theme.of(context).colorScheme.background),
                 ),
                 smallerSizedBoxHeight,
                 Text(
-                  widget.gallery.vacation.countryName,
+                  widget.vacation.countryName,
                   style: TextStyle(
                       fontSize: 10.0,
                       color: Theme.of(context).colorScheme.background),
@@ -101,7 +102,7 @@ class PhotoGalleryState extends State<PhotoGallery> {
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.network(
-                      image as String,
+                      image,
                       fit: BoxFit.cover,
                       height: 150,
                       width: 200,

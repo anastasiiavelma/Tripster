@@ -9,6 +9,7 @@ import 'package:tripster/domain/models/vacation_model.dart';
 import 'package:tripster/presentation/cubits/vacation_cubit/vacation_cubit.dart';
 import 'package:tripster/presentation/screens/home/maps.dart';
 import 'package:tripster/presentation/screens/planning_trip/detail_plan_screen.dart';
+import 'package:tripster/presentation/screens/planning_trip/widgets/custom_search_widget.dart';
 import 'package:tripster/presentation/widgets/buttons/change_theme_button.dart';
 import 'package:tripster/utils/constants.dart';
 
@@ -23,6 +24,8 @@ class PlanTripScreen extends StatefulWidget {
 class _PlanTripScreenState extends State<PlanTripScreen> {
   late final VacationCubit vacationCubit;
   final VacationRepository _vacationRepository = VacationRepository();
+  bool sortByNewest = false;
+  String searchQuery = '';
   @override
   void initState() {
     vacationCubit = VacationCubit(_vacationRepository);
@@ -84,12 +87,46 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
               );
             }),
           ),
+          SliverToBoxAdapter(
+            child: smallSizedBoxHeight,
+          ),
+          SliverToBoxAdapter(
+            child: Row(
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.import_export,
+                    size: 30,
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      sortByNewest = !sortByNewest;
+                    });
+                  },
+                ),
+                Expanded(
+                  child: CustomSearchTextField(
+                    onChanged: (value) {
+                      setState(() {
+                        searchQuery = value;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
           SliverPadding(
             padding: smallerPadding,
             sliver: BlocProvider(
               create: (context) => vacationCubit,
               child: PlanTripListWidget(
-                  token: widget.token, vacationCubit: vacationCubit),
+                token: widget.token,
+                vacationCubit: vacationCubit,
+                sortByNewest: sortByNewest,
+                searchQuery: searchQuery,
+              ),
             ),
           ),
         ],
@@ -100,11 +137,15 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
 
 class PlanTripListWidget extends StatefulWidget {
   final String? token;
+  final bool sortByNewest;
+  final String searchQuery;
   final VacationCubit vacationCubit;
   const PlanTripListWidget({
     super.key,
     this.token,
     required this.vacationCubit,
+    required this.sortByNewest,
+    required this.searchQuery,
   });
 
   @override
@@ -127,6 +168,16 @@ class _PlanTripListWidgetState extends State<PlanTripListWidget> {
           );
         } else if (state is VacationsLoaded) {
           final vacations = state.vacations;
+          if (widget.sortByNewest) {
+            vacations.sort((a, b) => b.startDate.compareTo(a.startDate));
+          } else {
+            vacations.sort((a, b) => a.startDate.compareTo(b.startDate));
+          }
+          final filteredVacations = vacations
+              .where((vacation) => vacation.countryName
+                  .toLowerCase()
+                  .contains(widget.searchQuery.toLowerCase()))
+              .toList();
           return SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 1,
@@ -135,24 +186,27 @@ class _PlanTripListWidgetState extends State<PlanTripListWidget> {
             ),
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                final vacation = vacations[index];
-                return GestureDetector(
-                  onTap: () async {
-                    await Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => BlocProvider.value(
-                              value: widget.vacationCubit,
-                              child: DetailPlanTripScreen(
-                                vacation: vacation,
-                                token: widget.token,
-                                vacationCubit: widget.vacationCubit,
-                              ),
-                            )));
-                    widget.vacationCubit.fetchUserVacations(widget.token);
-                  },
-                  child: FadeInDown(
-                      duration: const Duration(milliseconds: 800),
-                      child: CardWidget(vacation: vacation)),
-                );
+                if (filteredVacations.isNotEmpty &&
+                    index < filteredVacations.length) {
+                  final vacation = filteredVacations[index];
+                  return GestureDetector(
+                    onTap: () async {
+                      await Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => BlocProvider.value(
+                                value: widget.vacationCubit,
+                                child: DetailPlanTripScreen(
+                                  vacation: vacation,
+                                  token: widget.token,
+                                  vacationCubit: widget.vacationCubit,
+                                ),
+                              )));
+                      widget.vacationCubit.fetchUserVacations(widget.token);
+                    },
+                    child: FadeInDown(
+                        duration: const Duration(milliseconds: 800),
+                        child: CardWidget(vacation: vacation)),
+                  );
+                }
               },
               childCount: vacations.length,
             ),
@@ -200,15 +254,15 @@ class CardWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Expanded(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Maps(
-                      latitude: vacation.countryLat!,
-                      longitude: vacation.countryLon!,
-                    ),
-                  ),
-                ),
+                // Expanded(
+                //   child: ClipRRect(
+                //     borderRadius: BorderRadius.circular(8.0),
+                //     child: Maps(
+                //       latitude: vacation.countryLat!,
+                //       longitude: vacation.countryLon!,
+                //     ),
+                //   ),
+                // ),
                 smallSizedBoxHeight,
                 Text(
                   overflow: TextOverflow.clip,

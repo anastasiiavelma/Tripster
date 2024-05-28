@@ -13,10 +13,10 @@ class Note {
 
   factory Note.fromJson(Map<String, dynamic> json) {
     return Note(
-      noteId: json['_id'],
-      title: json['title'],
-      description: json['description'],
-      vacationDayId: json['vacationDayId'],
+      noteId: json['_id'] ?? '',
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      vacationDayId: json['vacationDayId'] ?? '',
     );
   }
 

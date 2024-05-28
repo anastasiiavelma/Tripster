@@ -44,7 +44,8 @@ class VacationRepository {
   Future<List<VacationDay>?> getUserVacationDays(
       String vacationId, String? token) async {
     final response = await http.get(
-      Uri.parse('https://tripser-backend.onrender.com/vacationDays'),
+      Uri.parse(
+          'https://tripser-backend.onrender.com/vacationDays/$vacationId'),
       headers: {'Authorization': 'Bearer $token'},
     );
 
@@ -79,6 +80,36 @@ class VacationRepository {
     }
   }
 
+  Future<List<Note>> getNotesByVacationDayId(
+      String vacationDayId, String? token) async {
+    final response = await http.get(
+      Uri.parse(
+          'https://tripser-backend.onrender.com/vacationDays/$vacationDayId/notes'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body) as List;
+      return jsonData.map((noteJson) => Note.fromJson(noteJson)).toList();
+    } else {
+      throw Exception('Failed to load notes: ${response.statusCode}');
+    }
+  }
+
+  Future<Note?> getNoteById(String noteId, String? token) async {
+    final response = await http.get(
+      Uri.parse('https://tripser-backend.onrender.com/notes/$noteId'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      return Note.fromJson(jsonData);
+    } else {
+      throw Exception('Failed to load note: ${response.statusCode}');
+    }
+  }
+
   Future<Note> createNote({
     required String title,
     required String description,
@@ -106,18 +137,43 @@ class VacationRepository {
     }
   }
 
+  Future<Note> updateNote({
+    required String noteId,
+    required String title,
+    required String description,
+    required String vacationDayId,
+    required String? token,
+  }) async {
+    final response = await http.put(
+      Uri.parse('https://tripser-backend.onrender.com/notes/$noteId'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'noteId': noteId,
+        'title': title,
+        'description': description,
+        'vacationDayId': vacationDayId,
+      }),
+    );
+
+    final jsonData = json.decode(response.body);
+    return Note.fromJson(jsonData);
+  }
+
   Future<void> deleteNote({
     required String noteId,
     required String vacationDayId,
     required String? token,
   }) async {
-    final response = await http.delete(
-      Uri.parse('https://tripster-backend.onrender.com/notes/$noteId'),
-      headers: {'Authorization': 'Bearer $token'},
-    );
-
-    if (response.statusCode != 204) {
-      throw Exception('Failed to delete note: ${response.statusCode}');
+    try {
+      await http.delete(
+        Uri.parse('https://tripser-backend.onrender.com/notes/$noteId'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+    } on Exception catch (e) {
+      throw Exception('Failed to delete note: $e');
     }
   }
 }

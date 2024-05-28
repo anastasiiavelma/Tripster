@@ -9,6 +9,7 @@ import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 import 'package:tripster/presentation/screens/auth/sign_up_screen.dart';
 import 'package:tripster/presentation/widgets/snack_bar_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tripster/utils/constants.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key});
@@ -38,7 +39,6 @@ class _SignInScreenState extends State<SignInScreen> {
           child: BlocConsumer<AuthCubit, AuthState>(
             listener: (context, state) {
               if (state is AuthLoading) {
-                CircularProgressIndicator();
               } else if (state is AuthAuthenticated) {
                 final token = state.token;
                 print('================');
@@ -74,6 +74,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             height: 20,
                           ),
                           TextAccentButton(
+                            state: state,
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
                                 context.read<AuthCubit>().loginUser(
