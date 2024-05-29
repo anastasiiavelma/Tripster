@@ -17,7 +17,7 @@ class GalleryCubit extends Cubit<GalleryState> {
           await galleryRepository.getUserGalleries(token);
       emit(GalleryLoaded(galleryUser as List<Gallery>));
     } catch (e) {
-      emit(GalleryError('Failed to load user: $e'));
+      emit(GalleryError('Failed: $e'));
     }
   }
 
@@ -27,10 +27,36 @@ class GalleryCubit extends Cubit<GalleryState> {
     required String? token,
   }) async {
     try {
-      final gallery = await galleryRepository.createGallery(
+      emit(GalleryLoading());
+      await galleryRepository.createGallery(
         token: token,
         images: image!,
         vacationId: vacationId,
+      );
+
+      emit(GalleryLoading());
+      getUserGallery(token);
+    } catch (e) {
+      if (!isClosed) {
+        print(e);
+        emit(GalleryError(e.toString()));
+      }
+    }
+  }
+
+  Future<void> addImageToGallery({
+    required List<File>? image,
+    required String vacationId,
+    required String? token,
+    required String galleryId,
+  }) async {
+    try {
+      emit(GalleryLoading());
+      await galleryRepository.addImageToGallery(
+        token: token,
+        images: image!,
+        vacationId: vacationId,
+        galleryId: galleryId,
       );
       emit(GalleryLoading());
 
@@ -39,6 +65,65 @@ class GalleryCubit extends Cubit<GalleryState> {
       if (!isClosed) {
         emit(GalleryError(e.toString()));
       }
+    }
+  }
+
+  Future<void> deleteGallery({
+    required String galleryId,
+    required String vacationId,
+    required String? token,
+  }) async {
+    try {
+      await galleryRepository.deleteGallery(
+        galleryId: galleryId,
+        vacationId: vacationId,
+        token: token,
+      );
+
+      emit(GalleryLoading());
+      getUserGallery(token);
+    } catch (e) {
+      if (!isClosed) {
+        emit(GalleryError(e.toString()));
+      }
+    }
+  }
+
+  Future<void> deleteImageFromGallery({
+    required String image,
+    required String? token,
+    required String galleryId,
+  }) async {
+    try {
+      await galleryRepository.updateGallery(
+        token: token!,
+        removeImageUrl: image,
+        galleryId: galleryId,
+      );
+      emit(GalleryLoading());
+
+      getUserGallery(token);
+    } catch (e) {
+      if (!isClosed) {
+        emit(GalleryError(e.toString()));
+      }
+    }
+  }
+
+  Future<void> loadGallery({required String galleryId}) async {
+    try {
+      final gallery = await galleryRepository.getGalleryById(galleryId);
+      emit(GalleryLoading());
+      emit(GalleryPhotosLoaded(gallery!));
+      loadGallery(galleryId: galleryId);
+      if (!isClosed) {
+        emit(GalleryPhotosLoaded(gallery));
+      }
+    } catch (e) {
+      if (!isClosed) {
+        emit(GalleryError(e.toString()));
+      }
+      print('Error loading gallery: $e');
     }
   }
 }

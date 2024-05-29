@@ -45,7 +45,7 @@ class HeaderDecorationWidget extends StatelessWidget {
               child: Center(
                 child: Text(
                   "Welcome!",
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Theme.of(context).colorScheme.background,
                       ),
                 ),
@@ -60,7 +60,7 @@ class HeaderDecorationWidget extends StatelessWidget {
               child: Center(
                 child: Text(
                   "Let`s discover!",
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Theme.of(context).colorScheme.background,
                       ),
                 ),

@@ -11,6 +11,11 @@ class GalleryLoaded extends GalleryState {
   GalleryLoaded(this.galleries);
 }
 
+class GalleryPhotosLoaded extends GalleryState {
+  final Gallery gallery;
+  GalleryPhotosLoaded(this.gallery);
+}
+
 class GalleryError extends GalleryState {
   final String error;
   GalleryError(this.error);

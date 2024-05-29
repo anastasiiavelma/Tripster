@@ -4,6 +4,7 @@ import 'package:tripster/domain/models/user_model.dart';
 import 'package:tripster/presentation/cubits/profile_cubit/profile_cubit.dart';
 import 'package:tripster/presentation/screens/profile/edit_profile_screen.dart';
 import 'package:tripster/presentation/screens/settings/settings_screen.dart';
+import 'package:tripster/utils/constants.dart';
 
 class UserInfoWidget extends StatelessWidget {
   final String? token;
@@ -73,7 +74,10 @@ class UserInfoWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       "Edit profile",
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall!
+                          .copyWith(color: kAccentColor),
                     ),
                   ),
                 ),
@@ -87,7 +91,7 @@ class UserInfoWidget extends StatelessWidget {
                   icon: Icon(
                     Icons.settings,
                     color: Theme.of(context).colorScheme.onBackground,
-                    size: 20,
+                    size: 30,
                   ),
                 ),
               ],

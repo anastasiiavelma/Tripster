@@ -11,7 +11,9 @@ import 'package:tripster/presentation/screens/home/maps.dart';
 import 'package:tripster/presentation/screens/planning_trip/detail_plan_screen.dart';
 import 'package:tripster/presentation/screens/planning_trip/widgets/custom_search_widget.dart';
 import 'package:tripster/presentation/widgets/buttons/change_theme_button.dart';
+import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 import 'package:tripster/utils/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PlanTripScreen extends StatefulWidget {
   final String? token;
@@ -178,6 +180,35 @@ class _PlanTripListWidgetState extends State<PlanTripListWidget> {
                   .toLowerCase()
                   .contains(widget.searchQuery.toLowerCase()))
               .toList();
+          if (filteredVacations.isEmpty) {
+            return SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 150,
+                  ),
+                  Text("Vacations list is empty. Create vacation!",
+                      style: Theme.of(context).textTheme.bodyMedium),
+                  smallSizedBoxHeight,
+                  smallSizedBoxHeight,
+                  SizedBox(
+                    width: 150,
+                    child: TextAccentButton(
+                      height: 40,
+                      onTap: () {
+                        Uri uri = Uri.parse('https://tripster-web.vercel.app');
+                        _launchInBrowser(uri);
+                      },
+                      child: Text('Open Website',
+                          style: Theme.of(context).textTheme.bodySmall),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
           return SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 1,
@@ -213,15 +244,34 @@ class _PlanTripListWidgetState extends State<PlanTripListWidget> {
           );
         } else if (state is VacationError) {
           return SliverToBoxAdapter(
-            child: Center(child: Text("Error: ${state.message}")),
+            child: Center(
+                child: Text("Error: ${state.message}, ",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineLarge!
+                        .copyWith(color: kAccentColor))),
           );
         } else {
           return SliverToBoxAdapter(
-            child: Center(child: Text("No vacations available")),
+            child: Center(
+                child: Text("No vacations available",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineLarge!
+                        .copyWith(color: kAccentColor))),
           );
         }
       },
     );
+  }
+
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
   }
 }
 

@@ -19,29 +19,26 @@ class TextAccentButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 200),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          height: height ?? 50,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: color ?? Theme.of(context).colorScheme.tertiary,
-          ),
-          child: Center(
-            child: state is AuthLoading
-                ? SizedBox(
-                    height: 10,
-                    width: 10,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                          Theme.of(context).colorScheme.background),
-                    ),
-                  )
-                : child,
-          ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: height ?? 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: color ?? Theme.of(context).colorScheme.tertiary,
+        ),
+        child: Center(
+          child: state is AuthLoading
+              ? SizedBox(
+                  height: 10,
+                  width: 10,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).colorScheme.background),
+                  ),
+                )
+              : child,
         ),
       ),
     );

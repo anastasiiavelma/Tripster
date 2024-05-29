@@ -1,26 +1,30 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tripster/data/repository/gallery_repository.dart';
-import 'package:tripster/data/repository/vacation_repository.dart';
+import 'package:tripster/domain/models/gallery_model.dart';
 import 'package:tripster/domain/models/vacation_model.dart';
 import 'package:tripster/presentation/cubits/gallery_cubit/gallery_cubit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tripster/presentation/widgets/buttons/text_button.dart';
+import 'package:tripster/presentation/widgets/custom_text_widget.dart';
+import 'package:tripster/presentation/widgets/snack_bar_widget.dart';
 import 'package:tripster/utils/constants.dart';
 
 class CollectionDialog extends StatefulWidget {
   final String? token;
-  final List<Vacation> vacations1;
+  final bool isEdit;
+  final List<Vacation> vacations;
+  final Vacation? vacation;
+  final Gallery? gallery;
   final GalleryCubit galleryCubit;
-  const CollectionDialog(
-      {Key? key,
-      this.token,
-      required this.vacations1,
-      required this.galleryCubit})
-      : super(key: key);
+  const CollectionDialog({
+    Key? key,
+    this.token,
+    required this.vacations,
+    required this.galleryCubit,
+    required this.isEdit,
+    this.vacation,
+    this.gallery,
+  }) : super(key: key);
 
   @override
   _CollectionDialogState createState() => _CollectionDialogState();
@@ -30,16 +34,15 @@ class _CollectionDialogState extends State<CollectionDialog> {
   List<File>? _selectedImages;
   String? _selectedVacationId;
 
-  @override
   void initState() {
     super.initState();
+
     _selectedVacationId =
-        widget.vacations1.isNotEmpty ? widget.vacations1[0].vacationId : '';
+        widget.vacations.isNotEmpty ? widget.vacations[0].vacationId : null;
   }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.vacations1.length);
     print(_selectedVacationId);
     return Container(
       constraints: const BoxConstraints(minHeight: 500),
@@ -58,7 +61,7 @@ class _CollectionDialogState extends State<CollectionDialog> {
           children: [
             Center(
               child: Text(
-                'Add New Gallery',
+                widget.isEdit ? 'Update gallery' : 'Add New Gallery',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
@@ -66,46 +69,51 @@ class _CollectionDialogState extends State<CollectionDialog> {
             Padding(
               padding: smallPadding,
               child: Text(
-                'Select vacation',
+                widget.isEdit ? 'Name gallery' : 'Select vacation',
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
-            smallSizedBoxHeight,
             SizedBox(
               height: 60,
-              child: DropdownButtonFormField(
-                key: UniqueKey(),
-                value: _selectedVacationId,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedVacationId = value;
-                  });
-                },
-                items: widget.vacations1.map((vacation) {
-                  return DropdownMenuItem(
-                    value: vacation.vacationId.isNotEmpty
-                        ? vacation.vacationId
-                        : '',
-                    child: Text(
-                      vacation.name,
-                      style: Theme.of(context).textTheme.headlineMedium,
+              child: widget.isEdit
+                  ? CircularTextWithBorder(
+                      text: widget.vacation!.name,
+                      fontSize: 20.0,
+                      borderColor: Theme.of(context).colorScheme.onBackground,
+                    )
+                  : DropdownButtonFormField(
+                      key: UniqueKey(),
+                      value: _selectedVacationId,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedVacationId = value;
+                        });
+                      },
+                      items: widget.vacations.map((vacation) {
+                        return DropdownMenuItem(
+                          value: vacation.vacationId.isNotEmpty
+                              ? vacation.vacationId
+                              : '',
+                          child: Text(
+                            vacation.name,
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          ),
+                        );
+                      }).toList(),
+                      decoration: InputDecoration(
+                        labelStyle: Theme.of(context).textTheme.headlineMedium,
+                        labelText: 'select vacations',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
                     ),
-                  );
-                }).toList(),
-                decoration: InputDecoration(
-                  labelStyle: Theme.of(context).textTheme.headlineMedium,
-                  labelText: 'vacations',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                ),
-              ),
             ),
             smallSizedBoxHeight,
             Padding(
               padding: smallPadding,
               child: Text(
-                'Select photos',
+                widget.isEdit ? 'Add new photos' : 'Select photos',
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
@@ -115,33 +123,52 @@ class _CollectionDialogState extends State<CollectionDialog> {
             TextAccentButton(
               color: Theme.of(context).colorScheme.onBackground,
               onTap: () async {
-                if (_selectedVacationId!.isNotEmpty &&
-                    _selectedImages != null) {
-                  widget.galleryCubit.createGallery(
+                if (widget.isEdit) {
+                  await widget.galleryCubit.addImageToGallery(
                     image: _selectedImages!,
-                    vacationId: _selectedVacationId!,
+                    vacationId: widget.vacation!.vacationId,
                     token: widget.token,
+                    galleryId: widget.gallery!.galleryId,
+                  );
+                  CustomSnackBar.show(
+                    context,
+                    message: 'Gallery updated successfully!',
+                    backgroundColor: Colors.green,
+                    textColor: Colors.white,
                   );
                   Navigator.of(context).pop();
                 } else {
-                  print('error');
+                  if (_selectedVacationId!.isNotEmpty &&
+                      _selectedImages != null) {
+                    widget.galleryCubit.createGallery(
+                      image: _selectedImages!,
+                      vacationId: _selectedVacationId!,
+                      token: widget.token,
+                    );
+                    CustomSnackBar.show(
+                      context,
+                      message: 'Gallery created successfully!',
+                      backgroundColor: Colors.green,
+                      textColor: Colors.white,
+                    );
+                    Navigator.of(context).pop();
+                  } else {
+                    CustomSnackBar.show(
+                      context,
+                      message: 'Please, add photo',
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                    );
+                  }
                 }
               },
-              child: Text('Add', style: Theme.of(context).textTheme.bodySmall),
+              child: Text(widget.isEdit ? 'Update' : 'Add',
+                  style: Theme.of(context).textTheme.bodySmall),
             ),
           ],
         ),
       ),
     );
-  }
-
-  Future<List<String>> _convertFilesToBase64(List<File> files) async {
-    List<String> base64Images = [];
-    for (File file in files) {
-      final bytes = await file.readAsBytes();
-      base64Images.add(base64Encode(bytes));
-    }
-    return base64Images;
   }
 
   Widget _selectPhoto() {
@@ -168,12 +195,18 @@ class _CollectionDialogState extends State<CollectionDialog> {
               child: IconButton(
                 onPressed: () async {
                   final List<XFile>? images =
-                      await ImagePicker().pickMultiImage();
-                  if (images != null) {
+                      await ImagePicker().pickMultiImage(imageQuality: 10);
+                  if (images != null && images.length < 11) {
                     setState(() {
                       _selectedImages =
                           images.map((image) => File(image.path)).toList();
                     });
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('You can select up to 10 photos.'),
+                      ),
+                    );
                   }
                 },
                 icon: Icon(

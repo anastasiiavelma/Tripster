@@ -43,7 +43,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
     final token = ModalRoute.of(context)!.settings.arguments as String?;
 
     tabs = [
-      HomeScreen(),
+      HomeScreen(token: token == null ? widget.token : token),
       PlanTripScreen(token: token == null ? widget.token : token),
       LandmarkRecognition(),
       ProfileScreen(token: token == null ? widget.token : token),
@@ -113,7 +113,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
         children: tabs.map((Widget tab) {
           if (_selectedIndex == tabs.indexOf(tab)) {
             if (_selectedIndex == 0) {
-              return HomeScreen();
+              return HomeScreen(token: token == null ? widget.token : token);
             } else if (_selectedIndex == 1) {
               return PlanTripScreen(
                   token: token == null ? widget.token : token);

@@ -8,10 +8,24 @@ class PlaceCubit extends Cubit<PlaceState> {
 
   PlaceCubit(this.placeRepository) : super(PlaceInitial());
 
-  Future<void> getPlaces() async {
+  Future<void> getPlaces(String? token) async {
     emit(PlaceLoading());
     try {
-      final List<Place> places = await placeRepository.getPlaces();
+      final List<Place> places = await placeRepository.getPlaces(token);
+      if (!isClosed) {
+        emit(PlaceLoaded(places));
+      }
+    } catch (e) {
+      if (!isClosed) {
+        emit(PlaceError('Failed to load places: $e'));
+      }
+    }
+  }
+
+  Future<void> getRecommendedPlaces(String? token) async {
+    emit(PlaceLoading());
+    try {
+      final List<Place> places = await placeRepository.getRecommendation(token);
       if (!isClosed) {
         emit(PlaceLoaded(places));
       }

@@ -21,19 +21,10 @@ class Gallery {
       images = File(json['images']) as List<File>?;
     }
     return Gallery(
-      galleryId: json['galleryId'] ?? '',
+      galleryId: json['_id'] ?? '',
       images: images,
       imageUrls: List<String>.from(json['imageURLs'] ?? ''),
-      vacationId: json['vacationId'] ?? '',
+      vacationId: json['vacation'] ?? '',
     );
-  }
-
-  Map<String, dynamic> fromJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['vacationId'] = vacationId;
-    data['galleryId'] = galleryId;
-    data['images'] = images;
-    data['imageURLs'] = imageUrls;
-    return data;
   }
 }

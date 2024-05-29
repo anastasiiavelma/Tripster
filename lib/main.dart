@@ -62,6 +62,7 @@ class _MyAppState extends State<MyApp> {
       child: Consumer<DarkThemeProvider>(
           builder: (BuildContext context, value, Widget? child) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           theme: basicTheme(themeChangeProvider.darkTheme, context),
           title: 'Tripster',
           initialRoute: widget.token == null ? '/signIn' : '/menu',
