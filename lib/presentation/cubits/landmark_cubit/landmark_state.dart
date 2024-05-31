@@ -13,4 +13,7 @@ class LandmarkLoaded extends LandmarkState {
   LandmarkLoaded(this.landmarkName, this.selectedImage);
 }
 
-class LandmarkError extends LandmarkState {}
+class LandmarkError extends LandmarkState {
+  final String message;
+  LandmarkError(this.message);
+}

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:tripster/presentation/screens/auth/sign_up_screen.dart';
 import 'package:tripster/presentation/widgets/snack_bar_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tripster/utils/constants.dart';
+import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key});
@@ -59,7 +61,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 child: Column(
                   children: <Widget>[
                     HeaderWidget(
-                      title: 'Login',
+                      title: LocaleKeys.login.tr(),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
@@ -84,7 +86,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               }
                             },
                             child: Text(
-                              "Login",
+                              LocaleKeys.login.tr(),
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ),
@@ -152,10 +154,10 @@ class _LoginFormsWidgetState extends State<LoginFormsWidget> {
                   child: TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter your email';
+                        return LocaleKeys.invalid_email.tr();
                       } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                           .hasMatch(value)) {
-                        return 'Please enter a valid email';
+                        return LocaleKeys.invalid_email.tr();
                       }
                       return null;
                     },
@@ -163,7 +165,7 @@ class _LoginFormsWidgetState extends State<LoginFormsWidget> {
                     controller: widget.emailController,
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Email",
+                        hintText: LocaleKeys.email.tr(),
                         hintStyle: Theme.of(context).textTheme.bodyMedium),
                   ),
                 ),
@@ -172,7 +174,7 @@ class _LoginFormsWidgetState extends State<LoginFormsWidget> {
                   child: TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter your password';
+                        return LocaleKeys.login_enter_password.tr();
                       }
                       return null;
                     },
@@ -181,7 +183,7 @@ class _LoginFormsWidgetState extends State<LoginFormsWidget> {
                     obscureText: true,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: "Password",
+                      hintText: LocaleKeys.password.tr(),
                       hintStyle: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
@@ -206,11 +208,11 @@ class HaveAccWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Don't have an account?",
+          Text(LocaleKeys.havent_account.tr(),
               style: Theme.of(context).textTheme.headlineSmall),
           TextButton(
             child: Text(
-              "Sign Up",
+              LocaleKeys.sign_up.tr(),
               style: Theme.of(context).textTheme.titleSmall,
             ),
             onPressed: () => Navigator.push(
@@ -271,7 +273,7 @@ class LoginHeaderWidget extends StatelessWidget {
             duration: const Duration(milliseconds: 1600),
             child: Center(
               child: Text(
-                "Login",
+                LocaleKeys.login.tr(),
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),

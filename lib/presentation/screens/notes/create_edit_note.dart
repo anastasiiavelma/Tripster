@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tripster/domain/models/note_model.dart';
 import 'package:tripster/domain/models/vacation_day_model.dart';
 import 'package:tripster/presentation/cubits/vacation_cubit/note_cubit.dart';
 import 'package:tripster/presentation/widgets/custom_textfield.dart';
+import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
 class AddNoteDialog extends StatefulWidget {
   const AddNoteDialog(
@@ -47,7 +49,9 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
       backgroundColor: Theme.of(context).colorScheme.primary,
       title: Center(
         child: Text(
-          widget.isEdit ? 'Edit note for trip' : 'Add note for trip',
+          widget.isEdit
+              ? LocaleKeys.edit_create_note_edit_note.tr()
+              : LocaleKeys.edit_create_note_add_note.tr(),
           style: Theme.of(context).textTheme.headlineMedium,
         ),
       ),
@@ -58,12 +62,12 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
           children: [
             CustomTextField(
               controller: _titleController,
-              text: 'Title',
+              text: LocaleKeys.title.tr(),
             ),
             CustomTextField(
               maxLines: 3,
               controller: _descriptionController,
-              text: 'Description',
+              text: LocaleKeys.desc.tr(),
             ),
           ],
         ),
@@ -74,7 +78,7 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
             Navigator.of(context).pop();
           },
           child: Text(
-            'Cancel',
+            LocaleKeys.cancel.tr(),
             style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
@@ -100,7 +104,9 @@ class _AddNoteDialogState extends State<AddNoteDialog> {
             }
           },
           child: Text(
-            widget.isEdit ? 'Edit' : 'Add',
+            widget.isEdit
+                ? LocaleKeys.edit_create_note_edit_note.tr()
+                : LocaleKeys.edit_create_note_add_note.tr(),
             style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),

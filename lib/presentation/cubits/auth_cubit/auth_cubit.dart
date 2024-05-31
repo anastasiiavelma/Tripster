@@ -22,7 +22,8 @@ class AuthCubit extends Cubit<AuthState> {
       final token = await _authRepository.loginUser(email, password);
       emit(AuthAuthenticated(token));
     } catch (e) {
-      emit(AuthError('$e'));
+      print(e);
+      emit(AuthError('Incorrect email or password'));
     }
   }
 
@@ -32,7 +33,8 @@ class AuthCubit extends Cubit<AuthState> {
       final token = await _authRepository.registerUser(name, email, password);
       emit(AuthAuthenticated(token));
     } catch (e) {
-      emit(AuthError('$e'));
+      print(e);
+      emit(AuthError('Incorrect email or password'));
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tripster/domain/models/user_model.dart';
@@ -8,6 +9,7 @@ import 'package:tripster/presentation/cubits/profile_cubit/profile_cubit.dart';
 import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 import 'package:tripster/presentation/widgets/custom_textfield.dart';
 import 'package:tripster/utils/constants.dart';
+import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final ProfileCubit profileCubit;
@@ -64,7 +66,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Update information',
+                      Text(LocaleKeys.update_info.tr(),
                           style: Theme.of(context)
                               .textTheme
                               .headlineMedium
@@ -72,7 +74,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   fontSize: 24, fontWeight: FontWeight.bold)),
                       smallSizedBoxHeight,
                       smallSizedBoxHeight,
-                      Text('Change name',
+                      Text(LocaleKeys.change_name.tr(),
                           style: Theme.of(context)
                               .textTheme
                               .headlineMedium
@@ -82,13 +84,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 CustomTextField(
                   controller: _nameController,
-                  text: 'Name',
+                  text: LocaleKeys.name.tr(),
                 ),
                 smallSizedBoxHeight,
                 smallSizedBoxHeight,
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),
-                  child: Text('Change photo',
+                  child: Text(LocaleKeys.change_photo.tr(),
                       style: Theme.of(context)
                           .textTheme
                           .headlineMedium
@@ -113,7 +115,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 34, vertical: 1),
-                    child: Text("Update information",
+                    child: Text(LocaleKeys.update_info.tr(),
                         style: Theme.of(context).textTheme.bodySmall),
                   ),
                 ),
@@ -166,7 +168,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             Expanded(
               child: Center(
                 child: _image == null
-                    ? Text('No image selected')
+                    ? Text(
+                        LocaleKeys.no_image_selected.tr(),
+                      )
                     : SizedBox(height: 50, child: Image.file(_image!)),
               ),
             ),

@@ -14,7 +14,7 @@ class LandmarkRepository {
     final imageBytes = await pickedFile.readAsBytes();
     final response = await http.post(
       Uri.parse(
-          'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyAyquNtFHwBbECH15Qekzr4cAvA2fFpP_s'),
+          'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyAT9zDYgTBd_A_XAP92CFWY2hsQ2caVcy4'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'requests': [
@@ -30,6 +30,7 @@ class LandmarkRepository {
 
     if (response.statusCode == 200) {
       final responseData = jsonDecode(response.body);
+      print(responseData);
       final landmarkAnnotations =
           responseData['responses']?[0]?['landmarkAnnotations'];
 

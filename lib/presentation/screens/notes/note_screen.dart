@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripster/domain/models/note_model.dart';
@@ -7,6 +8,7 @@ import 'package:tripster/presentation/screens/planning_trip/notes/create_edit_no
 import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 import 'package:tripster/utils/constants.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
 class NoteInTripDaysWidget extends StatefulWidget {
   const NoteInTripDaysWidget({
@@ -82,7 +84,7 @@ class _NoteInTripDaysWidgetState extends State<NoteInTripDaysWidget> {
         child: Column(
           children: [
             Center(
-              child: Text('Day plan',
+              child: Text(LocaleKeys.plan_day.tr(),
                   style: Theme.of(context).textTheme.titleMedium),
             ),
             if (isLoading)
@@ -242,7 +244,7 @@ class _NoteInTripDaysWidgetState extends State<NoteInTripDaysWidget> {
                 );
               },
               child: Text(
-                'Add note to plan',
+                LocaleKeys.add_note_to_plane.tr(),
                 style: Theme.of(context)
                     .textTheme
                     .headlineMedium

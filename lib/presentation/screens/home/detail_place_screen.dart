@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tripster/domain/models/place_model.dart';
 import 'package:tripster/presentation/screens/home/maps.dart';
 import 'package:tripster/utils/constants.dart';
 import 'package:tripster/presentation/widgets/adress_widget.dart';
+import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
 class DetailPlaceScreen extends StatelessWidget {
   final Place place;
@@ -49,7 +51,7 @@ class DetailPlaceScreen extends StatelessWidget {
                   SizedBox(
                     height: 15,
                   ),
-                  Text('Overview',
+                  Text(LocaleKeys.overview.tr(),
                       style: Theme.of(context)
                           .textTheme
                           .headlineMedium

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:tripster/presentation/cubits/gallery_cubit/gallery_cubit.dart';
 import 'package:tripster/presentation/cubits/gallery_cubit/gallery_state.dart';
 import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 import 'package:tripster/utils/constants.dart';
+import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
 class PhotoGallery extends StatefulWidget {
   final Gallery gallery;
@@ -67,38 +69,54 @@ class PhotoGalleryState extends State<PhotoGallery> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(90.0),
+        preferredSize: Size.fromHeight(150.0),
         child: ClipRRect(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(30.0),
           ),
           child: AppBar(
-            title: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.vacation.name,
-                  style: TextStyle(
-                      fontSize: 20.0,
-                      color: Theme.of(context).colorScheme.background),
-                ),
-                smallerSizedBoxHeight,
-                Text(
-                  '${yearFormat.format(widget.vacation.endDate)}, '
-                  '${dayMonthFormat.format(widget.vacation.startDate)} - ${dayMonthFormat.format(widget.vacation.endDate)}',
-                  style: TextStyle(
-                      fontSize: 10.0,
-                      color: Theme.of(context).colorScheme.background),
-                ),
-                smallerSizedBoxHeight,
-                Text(
-                  widget.vacation.countryName,
-                  style: TextStyle(
-                      fontSize: 10.0,
-                      color: Theme.of(context).colorScheme.background),
-                ),
-              ],
+            automaticallyImplyLeading: false,
+            toolbarHeight: 110,
+            title: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Theme.of(context).colorScheme.background,
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(widget.vacation.name,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold)),
+                      smallerSizedBoxHeight,
+                      Text(
+                          '${yearFormat.format(widget.vacation.endDate)}, '
+                          '${dayMonthFormat.format(widget.vacation.startDate)} - ${dayMonthFormat.format(widget.vacation.endDate)}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold)),
+                      smallerSizedBoxHeight,
+                      Text(widget.vacation.countryName,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ],
+              ),
             ),
             backgroundColor: Theme.of(context).colorScheme.onBackground,
           ),
@@ -216,7 +234,7 @@ class DeleteDialog extends StatelessWidget {
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text(
-                      'Cancel',
+                      LocaleKeys.cancel.tr(),
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
@@ -233,7 +251,7 @@ class DeleteDialog extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Text(
-                        'Delete',
+                        LocaleKeys.gallery_photo_screen_delete.tr(),
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ),

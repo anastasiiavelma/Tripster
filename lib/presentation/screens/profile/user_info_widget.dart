@@ -1,10 +1,12 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tripster/domain/models/user_model.dart';
 import 'package:tripster/presentation/cubits/profile_cubit/profile_cubit.dart';
 import 'package:tripster/presentation/screens/profile/edit_profile_screen.dart';
 import 'package:tripster/presentation/screens/settings/settings_screen.dart';
 import 'package:tripster/utils/constants.dart';
+import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
 class UserInfoWidget extends StatelessWidget {
   final String? token;
@@ -41,6 +43,7 @@ class UserInfoWidget extends StatelessWidget {
           child: FadeInUp(
             duration: const Duration(milliseconds: 800),
             child: Text(
+              maxLines: 1,
               userInfo.email,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.start,
@@ -73,7 +76,7 @@ class UserInfoWidget extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Edit profile",
+                      LocaleKeys.edit_profile.tr(),
                       style: Theme.of(context)
                           .textTheme
                           .titleSmall!

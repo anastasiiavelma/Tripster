@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -13,7 +14,9 @@ import 'package:tripster/presentation/screens/planning_trip/widgets/custom_searc
 import 'package:tripster/presentation/widgets/buttons/change_theme_button.dart';
 import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 import 'package:tripster/utils/constants.dart';
+import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class PlanTripScreen extends StatefulWidget {
   final String? token;
@@ -62,10 +65,8 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // !!! to-do: delete
-                    ThemeButton(),
                     Text(
-                      'My trips',
+                      LocaleKeys.my_trips.tr(),
                       style: Theme.of(context)
                           .textTheme
                           .headlineMedium
@@ -189,7 +190,7 @@ class _PlanTripListWidgetState extends State<PlanTripListWidget> {
                   SizedBox(
                     height: 150,
                   ),
-                  Text("Vacations list is empty. Create vacation!",
+                  Text(LocaleKeys.edit_create_note_vacations_list_empty.tr(),
                       style: Theme.of(context).textTheme.bodyMedium),
                   smallSizedBoxHeight,
                   smallSizedBoxHeight,
@@ -201,7 +202,7 @@ class _PlanTripListWidgetState extends State<PlanTripListWidget> {
                         Uri uri = Uri.parse('https://tripster-web.vercel.app');
                         _launchInBrowser(uri);
                       },
-                      child: Text('Open Website',
+                      child: Text(LocaleKeys.open_website.tr(),
                           style: Theme.of(context).textTheme.bodySmall),
                     ),
                   ),
@@ -238,6 +239,7 @@ class _PlanTripListWidgetState extends State<PlanTripListWidget> {
                         child: CardWidget(vacation: vacation)),
                   );
                 }
+                return null;
               },
               childCount: vacations.length,
             ),
@@ -254,7 +256,7 @@ class _PlanTripListWidgetState extends State<PlanTripListWidget> {
         } else {
           return SliverToBoxAdapter(
             child: Center(
-                child: Text("No vacations available",
+                child: Text(LocaleKeys.collection_photo_no_vacations_found.tr(),
                     style: Theme.of(context)
                         .textTheme
                         .headlineLarge!
@@ -284,6 +286,7 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting();
     final DateFormat dayMonthFormat = DateFormat('dd MMMM');
     final DateFormat yearFormat = DateFormat('yyyy');
     return Padding(
@@ -304,15 +307,15 @@ class CardWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // Expanded(
-                //   child: ClipRRect(
-                //     borderRadius: BorderRadius.circular(8.0),
-                //     child: Maps(
-                //       latitude: vacation.countryLat!,
-                //       longitude: vacation.countryLon!,
-                //     ),
-                //   ),
-                // ),
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Maps(
+                      latitude: vacation.countryLat!,
+                      longitude: vacation.countryLon!,
+                    ),
+                  ),
+                ),
                 smallSizedBoxHeight,
                 Text(
                   overflow: TextOverflow.clip,
@@ -356,7 +359,7 @@ class CardWidget extends StatelessWidget {
                           Icon(Icons.money_outlined, color: Color(0xFF6e191d)),
                           smallerSizedBoxWidth,
                           Text(
-                            '${vacation.fullBudget.toString()} Dollars',
+                            '${vacation.fullBudget.toString()} ${LocaleKeys.dollars.tr()}',
                             style: Theme.of(context)
                                 .textTheme
                                 .displayLarge

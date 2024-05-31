@@ -11,17 +11,34 @@ import 'package:tripster/presentation/screens/home/home_screen.dart';
 import 'package:tripster/presentation/screens/landmark_recognation/landmark_recognation.dart';
 import 'package:tripster/presentation/screens/menu/menu_screen.dart';
 import 'package:tripster/presentation/screens/profile/my_profile_screen.dart';
+import 'package:tripster/utils/languages/generated/codegen_loader.g.dart';
 import 'package:tripster/utils/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await EasyLocalization.ensureInitialized();
+  tz.initializeTimeZones();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('token');
+
   print('user token in main $token');
+  tz.initializeTimeZones();
+
   runApp(
-    MyApp(token: token),
+    EasyLocalization(
+        supportedLocales: const [
+          Locale('en'),
+          Locale('uk'),
+        ],
+        path: 'assets/translations',
+        fallbackLocale: const Locale('en'),
+        assetLoader: const CodegenLoader(),
+        child: MyApp(token: token)),
   );
 }
 
@@ -62,6 +79,9 @@ class _MyAppState extends State<MyApp> {
       child: Consumer<DarkThemeProvider>(
           builder: (BuildContext context, value, Widget? child) {
         return MaterialApp(
+          locale: context.locale,
+          supportedLocales: context.supportedLocales,
+          localizationsDelegates: context.localizationDelegates,
           debugShowCheckedModeBanner: false,
           theme: basicTheme(themeChangeProvider.darkTheme, context),
           title: 'Tripster',

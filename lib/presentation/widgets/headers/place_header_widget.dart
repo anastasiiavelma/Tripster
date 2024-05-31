@@ -1,6 +1,8 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tripster/utils/constants.dart';
+import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
 class HeaderDecorationWidget extends StatelessWidget {
   const HeaderDecorationWidget({
@@ -44,7 +46,7 @@ class HeaderDecorationWidget extends StatelessWidget {
               duration: const Duration(milliseconds: 800),
               child: Center(
                 child: Text(
-                  "Welcome!",
+                  LocaleKeys.welcome.tr(),
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Theme.of(context).colorScheme.background,
                       ),
@@ -53,14 +55,15 @@ class HeaderDecorationWidget extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 150,
-            top: 140,
+            left: 155,
+            top: 145,
             child: FadeInUp(
               duration: const Duration(milliseconds: 1600),
               child: Center(
                 child: Text(
-                  "Let`s discover!",
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  LocaleKeys.lets_discover.tr(),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontSize: 23,
                         color: Theme.of(context).colorScheme.background,
                       ),
                 ),

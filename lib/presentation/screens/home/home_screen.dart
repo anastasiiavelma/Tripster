@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 import 'package:tripster/presentation/widgets/card/place_card.dart';
 import 'package:tripster/presentation/widgets/headers/place_header_widget.dart';
 import 'package:tripster/utils/constants.dart';
+import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,8 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: leftBottomPadding,
               child: Text(
-                'Places for your travel!',
+                LocaleKeys.places_for_your_travel.tr(),
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      fontSize: 23,
                       color: Theme.of(context).colorScheme.onBackground,
                     ),
               ),
@@ -58,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.transparent,
                   children: <Widget>[
                     Text(
-                      'All',
+                      LocaleKeys.all.tr(),
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                             color: Theme.of(context).colorScheme.onBackground,
                             fontSize: 18,
@@ -67,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
-                        'Recommended',
+                        LocaleKeys.recommendation.tr(),
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
                               fontSize: 18,
                               color: Theme.of(context).colorScheme.onBackground,
@@ -132,7 +135,7 @@ class RecommendedPlaceWidget extends StatelessWidget {
                     child: Center(
                       child: Column(
                         children: [
-                          Text('Please, take quiz for recommendation',
+                          Text(LocaleKeys.quiz_recommendation.tr(),
                               style: Theme.of(context).textTheme.bodyMedium),
                           smallSizedBoxHeight,
                           smallSizedBoxHeight,
@@ -144,7 +147,7 @@ class RecommendedPlaceWidget extends StatelessWidget {
                                     'https://tripster-web.vercel.app');
                                 _launchInBrowser(uri);
                               },
-                              child: Text('Open Website',
+                              child: Text(LocaleKeys.open_website.tr(),
                                   style: Theme.of(context).textTheme.bodySmall),
                             ),
                           ),
@@ -178,7 +181,6 @@ class RecommendedPlaceWidget extends StatelessWidget {
   }
 }
 
-// !! to-do implement to this page
 class PlaceListWidget extends StatelessWidget {
   final String? token;
   PlaceListWidget({Key? key, this.token});

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timelines/timelines.dart';
@@ -9,6 +10,7 @@ import 'package:tripster/presentation/screens/home/maps.dart';
 import 'package:tripster/presentation/screens/planning_trip/day_widget.dart';
 import 'package:tripster/presentation/screens/planning_trip/widgets/info_trip_widget.dart';
 import 'package:tripster/utils/constants.dart';
+import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
 class DetailPlanTripScreen extends StatefulWidget {
   final Vacation vacation;
@@ -29,8 +31,6 @@ class _DetailPlanTripScreenState extends State<DetailPlanTripScreen> {
   void initState() {
     widget.vacationCubit
         .fetchVacation(widget.vacation.vacationId, widget.token);
-    // widget.vacationCubit
-    //     .fetchUserVacationDays(widget.vacation.vacationId, widget.token);
     super.initState();
   }
 
@@ -52,10 +52,10 @@ class _DetailPlanTripScreenState extends State<DetailPlanTripScreen> {
               ),
               child: SizedBox(
                 height: 350,
-                // child: Maps(
-                //   latitude: widget.vacation.countryLat!,
-                //   longitude: widget.vacation.countryLon!,
-                // ),
+                child: Maps(
+                  latitude: widget.vacation.countryLat!,
+                  longitude: widget.vacation.countryLon!,
+                ),
               ),
             ),
           ),
@@ -113,7 +113,9 @@ class _VacationDaysWidgetState extends State<VacationDaysWidget> {
             print("Error: ${state.message}");
             return Center(child: Text("Error: ${state.message}"));
           } else {
-            return Center(child: Text("No vacation days available"));
+            return Center(
+                child: Text(LocaleKeys.edit_create_note_no_vacation_days.tr(),
+                    style: Theme.of(context).textTheme.headlineMedium));
           }
         },
       ),
@@ -137,7 +139,7 @@ class _VacationDaysWidgetState extends State<VacationDaysWidget> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
             child: Text(
-              'Travel days',
+              LocaleKeys.travel_days.tr(),
               style: Theme.of(context)
                   .textTheme
                   .headlineLarge

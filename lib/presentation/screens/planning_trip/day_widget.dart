@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripster/data/repository/vacation_repository.dart';
@@ -7,6 +8,7 @@ import 'package:tripster/presentation/screens/planning_trip/notes/note_screen.da
 import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 import 'package:tripster/utils/constants.dart';
 import 'package:intl/intl.dart';
+import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
 class DayWidget extends StatefulWidget {
   const DayWidget({
@@ -51,7 +53,7 @@ class _DayWidgetState extends State<DayWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Day ${widget.dayNumber}',
+                '${LocaleKeys.day.tr()} ${widget.dayNumber}',
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium
@@ -69,7 +71,7 @@ class _DayWidgetState extends State<DayWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Budget day:',
+              Text(LocaleKeys.budget_day.tr(),
                   style: Theme.of(context).textTheme.headlineMedium),
               widget.day.budget != null
                   ? Text(
@@ -80,7 +82,7 @@ class _DayWidgetState extends State<DayWidget> {
                           ?.copyWith(color: kErrorColorLight),
                     )
                   : Text(
-                      'No limit',
+                      LocaleKeys.edit_create_note_no_limit.tr(),
                       style: Theme.of(context)
                           .textTheme
                           .headlineMedium
@@ -94,7 +96,7 @@ class _DayWidgetState extends State<DayWidget> {
               Icon(Icons.airport_shuttle),
               smallerSizedBoxWidth,
               Text(
-                'Places',
+                LocaleKeys.places.tr(),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontSize: 21,
                     ),
@@ -109,7 +111,11 @@ class _DayWidgetState extends State<DayWidget> {
                     .map((place) => Text('• ${place}',
                         style: Theme.of(context).textTheme.headlineMedium))
                     .toList()
-                : [Text('No places yet')],
+                : [
+                    Text(
+                      LocaleKeys.edit_create_note_no_places_yet.tr(),
+                    )
+                  ],
           ),
           smallSizedBoxHeight,
           BlocProvider(
@@ -146,7 +152,7 @@ class _DayWidgetState extends State<DayWidget> {
                               }),
                           child: Text(
                             textAlign: TextAlign.start,
-                            'View plan',
+                            LocaleKeys.view_plan.tr(),
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineMedium

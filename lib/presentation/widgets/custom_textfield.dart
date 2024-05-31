@@ -13,19 +13,11 @@ class CustomTextField extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
           cursorColor: Theme.of(context).colorScheme.onBackground,
-
           maxLines: maxLines ?? 1,
           controller: controller,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onBackground,
               ),
-          // validator: (value) {
-          //   if (value!.isEmpty) {
-          //     return 'Please enter your password';
-          //   }
-          //   return null;
-          // },
-
           decoration: InputDecoration(
             labelText: text,
             labelStyle: Theme.of(context).textTheme.headlineMedium,

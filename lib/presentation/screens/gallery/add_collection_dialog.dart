@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tripster/domain/models/gallery_model.dart';
 import 'package:tripster/domain/models/vacation_model.dart';
@@ -8,6 +9,7 @@ import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 import 'package:tripster/presentation/widgets/custom_text_widget.dart';
 import 'package:tripster/presentation/widgets/snack_bar_widget.dart';
 import 'package:tripster/utils/constants.dart';
+import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
 class CollectionDialog extends StatefulWidget {
   final String? token;
@@ -44,6 +46,7 @@ class _CollectionDialogState extends State<CollectionDialog> {
   @override
   Widget build(BuildContext context) {
     print(_selectedVacationId);
+
     return Container(
       constraints: const BoxConstraints(minHeight: 500),
       decoration: BoxDecoration(
@@ -61,7 +64,9 @@ class _CollectionDialogState extends State<CollectionDialog> {
           children: [
             Center(
               child: Text(
-                widget.isEdit ? 'Update gallery' : 'Add New Gallery',
+                widget.isEdit
+                    ? LocaleKeys.dialog_gallery_update_gallery.tr()
+                    : LocaleKeys.dialog_gallery_add_new_gallery.tr(),
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
@@ -69,7 +74,9 @@ class _CollectionDialogState extends State<CollectionDialog> {
             Padding(
               padding: smallPadding,
               child: Text(
-                widget.isEdit ? 'Name gallery' : 'Select vacation',
+                widget.isEdit
+                    ? LocaleKeys.dialog_gallery_name_gallery.tr()
+                    : LocaleKeys.dialog_gallery_select_vacation.tr(),
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
@@ -102,7 +109,8 @@ class _CollectionDialogState extends State<CollectionDialog> {
                       }).toList(),
                       decoration: InputDecoration(
                         labelStyle: Theme.of(context).textTheme.headlineMedium,
-                        labelText: 'select vacations',
+                        labelText:
+                            LocaleKeys.dialog_gallery_select_vacations.tr(),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),
@@ -113,7 +121,9 @@ class _CollectionDialogState extends State<CollectionDialog> {
             Padding(
               padding: smallPadding,
               child: Text(
-                widget.isEdit ? 'Add new photos' : 'Select photos',
+                widget.isEdit
+                    ? LocaleKeys.dialog_gallery_add_new_photos.tr()
+                    : LocaleKeys.dialog_gallery_select_photos.tr(),
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
@@ -132,7 +142,8 @@ class _CollectionDialogState extends State<CollectionDialog> {
                   );
                   CustomSnackBar.show(
                     context,
-                    message: 'Gallery updated successfully!',
+                    message:
+                        LocaleKeys.dialog_gallery_gallery_updated_success.tr(),
                     backgroundColor: Colors.green,
                     textColor: Colors.white,
                   );
@@ -147,7 +158,8 @@ class _CollectionDialogState extends State<CollectionDialog> {
                     );
                     CustomSnackBar.show(
                       context,
-                      message: 'Gallery created successfully!',
+                      message: LocaleKeys.dialog_gallery_gallery_created_success
+                          .tr(),
                       backgroundColor: Colors.green,
                       textColor: Colors.white,
                     );
@@ -155,7 +167,7 @@ class _CollectionDialogState extends State<CollectionDialog> {
                   } else {
                     CustomSnackBar.show(
                       context,
-                      message: 'Please, add photo',
+                      message: LocaleKeys.dialog_gallery_please_add_photo.tr(),
                       backgroundColor: Colors.red,
                       textColor: Colors.white,
                     );
@@ -230,7 +242,7 @@ class _CollectionDialogState extends State<CollectionDialog> {
                           );
                         }).toList(),
                       )
-                    : Text('No images selected'),
+                    : Text(LocaleKeys.no_image_selected.tr()),
               ),
             ),
           ],

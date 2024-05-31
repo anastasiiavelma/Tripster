@@ -6,6 +6,8 @@ import 'package:tripster/presentation/cubits/profile_cubit/profile_state.dart';
 import 'package:tripster/data/repository/profile_repository.dart';
 import 'package:tripster/presentation/screens/auth/sign_up_screen.dart';
 
+import 'package:easy_localization/easy_localization.dart';
+
 class ProfileCubit extends Cubit<ProfileState> {
   final ProfileRepository profileRepository;
 
@@ -56,5 +58,9 @@ class ProfileCubit extends Cubit<ProfileState> {
       (Route<dynamic> route) => false,
     );
     emit(ProfileUnauthenticated());
+  }
+
+  Future<void> changeLocale(BuildContext context, Locale locale) async {
+    context.setLocale(locale);
   }
 }

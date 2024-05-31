@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:tripster/presentation/widgets/headers/header_widget.dart';
 import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 import 'package:tripster/presentation/screens/auth/sign_in_screen.dart';
 import 'package:tripster/presentation/widgets/snack_bar_widget.dart';
+import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key});
@@ -59,7 +61,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Column(
                   children: <Widget>[
                     HeaderWidget(
-                      title: 'Register',
+                      title: LocaleKeys.register.tr(),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -88,7 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               }
                             },
                             child: Text(
-                              "Register",
+                              LocaleKeys.register.tr(),
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ),
@@ -153,13 +155,13 @@ class RegisterFormWidget extends StatelessWidget {
                     controller: nameController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter your name';
+                        return LocaleKeys.register_enter_name.tr();
                       }
                       return null;
                     },
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Name",
+                        hintText: LocaleKeys.name.tr(),
                         hintStyle: Theme.of(context).textTheme.bodyMedium),
                   ),
                 ),
@@ -174,16 +176,16 @@ class RegisterFormWidget extends StatelessWidget {
                     controller: emailController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter your email';
+                        return LocaleKeys.invalid_email.tr();
                       } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                           .hasMatch(value)) {
-                        return 'Please enter a valid email';
+                        return LocaleKeys.invalid_email.tr();
                       }
                       return null;
                     },
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Email",
+                        hintText: LocaleKeys.email.tr(),
                         hintStyle: Theme.of(context).textTheme.bodyMedium),
                   ),
                 ),
@@ -194,17 +196,18 @@ class RegisterFormWidget extends StatelessWidget {
                           bottom: BorderSide(
                               color: Theme.of(context).colorScheme.shadow))),
                   child: TextFormField(
+                    obscureText: true,
                     style: TextStyle(color: Colors.black),
                     controller: passwordController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter your password';
+                        return LocaleKeys.register_enter_password.tr();
                       }
                       return null;
                     },
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Password",
+                        hintText: LocaleKeys.password.tr(),
                         hintStyle: Theme.of(context).textTheme.bodyMedium),
                   ),
                 ),
@@ -215,16 +218,16 @@ class RegisterFormWidget extends StatelessWidget {
                     controller: confirmPasswordController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter your password';
+                        return LocaleKeys.register_enter_password.tr();
                       } else if (value != passwordController.text) {
-                        return 'Passwords do not match';
+                        return LocaleKeys.register_passwords_no_match.tr();
                       }
                       return null;
                     },
                     obscureText: true,
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Confirm password",
+                        hintText: LocaleKeys.confirm_password.tr(),
                         hintStyle: Theme.of(context).textTheme.bodyMedium),
                   ),
                 ),
@@ -248,11 +251,11 @@ class HaveAccButtonWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Have an account?",
+          Text(LocaleKeys.have_an_account.tr(),
               style: Theme.of(context).textTheme.headlineSmall),
           TextButton(
             child: Text(
-              "Sign In",
+              LocaleKeys.sign_in.tr(),
               style: Theme.of(context).textTheme.titleSmall,
             ),
             onPressed: () => Navigator.push(

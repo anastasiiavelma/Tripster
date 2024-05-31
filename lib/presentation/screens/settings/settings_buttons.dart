@@ -1,13 +1,21 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tripster/presentation/cubits/profile_cubit/profile_cubit.dart';
 import 'package:tripster/presentation/widgets/buttons/change_theme_button.dart';
 import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 import 'package:tripster/utils/constants.dart';
+import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
-class SettingsButtonsWidget extends StatelessWidget {
+class SettingsButtonsWidget extends StatefulWidget {
   final ProfileCubit profileCubit;
   const SettingsButtonsWidget({super.key, required this.profileCubit});
 
+  @override
+  State<SettingsButtonsWidget> createState() => _SettingsButtonsWidgetState();
+}
+
+class _SettingsButtonsWidgetState extends State<SettingsButtonsWidget> {
+  String selectedLanguage = LocaleKeys.en.tr();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,27 +35,29 @@ class SettingsButtonsWidget extends StatelessWidget {
             padding: const EdgeInsets.all(15),
             child: Column(
               children: [
-                // Row(
-                //   children: [
-                //     Text('Language',
-                //         style: Theme.of(context).textTheme.bodyMedium),
-                //     spacer,
-                //     // TextButton(
-                //     //   onPressed: () {
-                //     //     _showLanguageDialog(context);
-                //     //   },
-                //     //   child: Text(
-                //     //       context.locale.languageCode == 'en'
-                //     //           ? LocaleKeys.english.tr()
-                //     //           : LocaleKeys.ukrainian.tr(),
-                //     //       style: Theme.of(context).textTheme.bodyMedium),
-                //     // ),
-                //   ],
-                // ),
-                smallSizedBoxHeight,
+                Row(
+                  children: [
+                    Text(LocaleKeys.language.tr(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(fontSize: 20)),
+                    spacer,
+                    TextButton(
+                      onPressed: () {
+                        _showLanguageDialog(context);
+                      },
+                      child: Text(
+                          context.locale.languageCode == 'en'
+                              ? LocaleKeys.en.tr()
+                              : LocaleKeys.ukr.tr(),
+                          style: Theme.of(context).textTheme.headlineMedium),
+                    ),
+                  ],
+                ),
                 smallSizedBoxHeight,
                 Row(children: [
-                  Text('Theme',
+                  Text(LocaleKeys.dark_theme.tr(),
                       style: Theme.of(context)
                           .textTheme
                           .headlineMedium
@@ -59,7 +69,7 @@ class SettingsButtonsWidget extends StatelessWidget {
                 smallSizedBoxHeight,
                 Row(
                   children: [
-                    Text('Exit',
+                    Text(LocaleKeys.exit.tr(),
                         style: Theme.of(context)
                             .textTheme
                             .headlineMedium
@@ -68,13 +78,13 @@ class SettingsButtonsWidget extends StatelessWidget {
                     TextAccentButton(
                       height: 30,
                       onTap: () {
-                        profileCubit.logout(context);
+                        widget.profileCubit.logout(context);
                         Navigator.of(context).pop();
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 34, vertical: 1),
-                        child: Text("Log out",
+                        child: Text(LocaleKeys.logout.tr(),
                             style: Theme.of(context).textTheme.bodySmall),
                       ),
                     ),
@@ -85,6 +95,52 @@ class SettingsButtonsWidget extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Future<String?> _showLanguageDialog(BuildContext context) async {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Select Language',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextButton(
+                onPressed: () async {
+                  context.setLocale(const Locale('en'));
+                  setState(() {
+                    selectedLanguage = LocaleKeys.en.tr();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  LocaleKeys.en.tr(),
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  context.setLocale(const Locale('uk'));
+                  setState(() {
+                    selectedLanguage = LocaleKeys.ukr.tr();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  LocaleKeys.ukr.tr(),
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

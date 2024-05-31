@@ -33,54 +33,54 @@ ThemeData basicTheme(bool isDarkTheme, BuildContext context) => ThemeData(
               onError: kErrorColorLight,
             ),
       textTheme: TextTheme(
-        titleLarge: GoogleFonts.lato(
+        titleLarge: GoogleFonts.notoSans(
             fontSize: largeTextSize,
             color: kPrimaryColor,
             letterSpacing: 1.0,
             fontWeight: FontWeight.bold),
 
-        titleMedium: GoogleFonts.lato(
+        titleMedium: GoogleFonts.notoSans(
             fontSize: mediumLargeTextSize,
             color: isDarkTheme ? kAccentColor : kBackgroundColor,
             letterSpacing: 1.0,
             fontWeight: FontWeight.bold),
 
-        headlineLarge: GoogleFonts.lato(
+        headlineLarge: GoogleFonts.notoSans(
             fontSize: mediumLargeTextSize,
             color: isDarkTheme ? kAccentColor : kPrimaryColor,
             letterSpacing: 1.0,
             fontWeight: FontWeight.bold),
 
-        titleSmall: GoogleFonts.lato(
+        titleSmall: GoogleFonts.notoSans(
             fontSize: smallTextSize,
             color: isDarkTheme ? kAccentColor : kBackgroundColor,
             fontWeight: FontWeight.bold),
 
-        headlineMedium: GoogleFonts.lato(
+        headlineMedium: GoogleFonts.notoSans(
             fontSize: 16,
             color: isDarkTheme ? kAccentColor : kBackgroundColor,
             fontWeight: FontWeight.normal),
 
-        headlineSmall: GoogleFonts.lato(
+        headlineSmall: GoogleFonts.notoSans(
           fontSize: smallTextSize,
           color: isDarkTheme ? kAccentColor : kBackgroundColor,
         ),
 
-        bodySmall: GoogleFonts.lato(
+        bodySmall: GoogleFonts.notoSans(
           fontSize: smallTextSize,
           color: isDarkTheme ? kBackgroundColor : kPrimaryColor,
           fontWeight: FontWeight.bold,
         ),
         // for textfield gray
-        bodyMedium: GoogleFonts.lato(
+        bodyMedium: GoogleFonts.notoSans(
           fontSize: mediumTextSize,
           color: kTexFieldColor,
         ),
-        displaySmall: GoogleFonts.lato(
+        displaySmall: GoogleFonts.notoSans(
           fontSize: smallTextSize,
           color: kTexFieldColor,
         ),
-        displayLarge: GoogleFonts.lato(
+        displayLarge: GoogleFonts.notoSans(
           fontSize: mediumTextSize,
           color: kBackgroundColor,
           fontWeight: FontWeight.bold,
