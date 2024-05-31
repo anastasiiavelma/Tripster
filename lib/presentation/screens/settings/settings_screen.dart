@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tripster/presentation/cubits/profile_cubit/profile_cubit.dart';
 import 'package:tripster/presentation/screens/settings/settings_buttons.dart';
-import 'package:tripster/presentation/widgets/custom_appbar.dart';
+import 'package:tripster/presentation/widgets/headers/custom_appbar.dart';
 import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
 class SettingScreen extends StatefulWidget {

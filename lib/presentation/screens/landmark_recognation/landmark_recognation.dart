@@ -9,7 +9,7 @@ import 'package:tripster/presentation/cubits/landmark_cubit/landmark_cubit.dart'
 import 'package:tripster/presentation/cubits/landmark_cubit/landmark_state.dart';
 import 'package:tripster/data/repository/landmark_repository.dart';
 import 'package:tripster/presentation/widgets/buttons/text_button.dart';
-import 'package:tripster/presentation/widgets/custom_appbar.dart';
+import 'package:tripster/presentation/widgets/headers/custom_appbar.dart';
 import 'package:tripster/utils/constants.dart';
 import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 

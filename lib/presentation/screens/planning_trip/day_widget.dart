@@ -4,10 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripster/data/repository/vacation_repository.dart';
 import 'package:tripster/domain/models/vacation_day_model.dart';
 import 'package:tripster/presentation/cubits/vacation_cubit/note_cubit.dart';
-import 'package:tripster/presentation/screens/planning_trip/notes/note_screen.dart';
+import 'package:tripster/presentation/screens/notes/note_screen.dart';
 import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 import 'package:tripster/utils/constants.dart';
-import 'package:intl/intl.dart';
 import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
 class DayWidget extends StatefulWidget {

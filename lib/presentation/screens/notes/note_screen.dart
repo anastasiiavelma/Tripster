@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripster/domain/models/note_model.dart';
 import 'package:tripster/domain/models/vacation_day_model.dart';
 import 'package:tripster/presentation/cubits/vacation_cubit/note_cubit.dart';
-import 'package:tripster/presentation/screens/planning_trip/notes/create_edit_note.dart';
+import 'package:tripster/presentation/screens/notes/create_edit_note.dart';
 import 'package:tripster/presentation/widgets/buttons/text_button.dart';
 import 'package:tripster/utils/constants.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';

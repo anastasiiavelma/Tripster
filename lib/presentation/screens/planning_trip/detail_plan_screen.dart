@@ -8,7 +8,7 @@ import 'package:tripster/domain/models/vacation_model.dart';
 import 'package:tripster/presentation/cubits/vacation_cubit/vacation_cubit.dart';
 import 'package:tripster/presentation/screens/home/maps.dart';
 import 'package:tripster/presentation/screens/planning_trip/day_widget.dart';
-import 'package:tripster/presentation/screens/planning_trip/widgets/info_trip_widget.dart';
+import 'package:tripster/presentation/screens/planning_trip/info_trip_widget.dart';
 import 'package:tripster/utils/constants.dart';
 import 'package:tripster/utils/languages/generated/locale_keys.g.dart';
 
